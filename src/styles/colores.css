@@ -1,0 +1,28 @@
+:root {
+    /* Base */
+    --color-bg: #BBBFBF;
+    --color-bg-secondary: #878787;
+    --color-surface: #05AD98;
+
+    --color-options: #0474C4;
+    --color-status: #ABC4EC;
+
+    /* Texto */
+    --color-text-white: #FFFFFF;
+    --color-text-light: #E5E7EB;
+    --color-text-muted: #9CA3AF;
+
+    /* Libros */
+    --color-card: #E2EBE5;
+    --color-card-image: #D2EBE5;
+    --color-dots: #b7d1bb;
+
+    /*Transparencias*/
+    --color-dark-semitransparent: #00000060;
+    --color-surface-semitransparent: #2E2E3360;
+
+    /* Estados */
+    --color-success-light: #4caf50;
+    --color-warning: #ff9800;
+    --color-error: #990000;
+}
