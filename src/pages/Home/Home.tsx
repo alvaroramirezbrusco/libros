@@ -1,9 +1,11 @@
+import PageHeader from '../../components/layout/PageHeader'
 import './Home.css'
 
 export default function Home() {
   return (
     <section className="page page-home">
-      <h1>Home</h1>
+      <PageHeader titulo="BookWeb" volver={false} />
+      {/* ...resto de la pantalla... */}
     </section>
   )
 }

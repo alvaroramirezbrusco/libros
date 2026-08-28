@@ -1,0 +1,30 @@
+/*----------------------------------------------------------
+   PageHeader.css — barra superior
+   Colores/tamaños desde src/styles/ (colores.css, tipografia.css)
+   ---------------------------------------------------------- */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--color-options);          /* #0474C4 — azul*/
+  color: var(--color-text-white);           /* #FFFFFF */
+  font-size: var(--font-size-sm);            /* 14px */
+  font-weight: var(--font-weight-medium);    /* 500 */
+}
+
+/* Botón de volver: sin fondo ni borde, solo el ícono */
+.page-header__volver {
+  display: inline-flex;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;      /* hereda el blanco del .page-header */
+  cursor: pointer;
+}
+
+.page-header__icono {
+  width: 16px;
+  height: 16px;
+}

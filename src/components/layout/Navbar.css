@@ -1,0 +1,39 @@
+/*--------------------------------------
+   Navbar.css — barra inferior FIJA
+   Colores/tamaños desde src/styles/ (colores.css, tipografia.css)
+   -  ----------------------------- */
+
+.navbar {
+  position: fixed;              /* fija respecto de la ventana: siempre visible */
+  bottom: 0;
+  left: 50%;                    /* estas 3 líneas la centran y la limitan */
+  transform: translateX(-50%);  /* al ancho de la columna .app (430px),   */
+  width: 100%;                  /* en vez de estirarse a toda la pantalla  */
+  max-width: 430px;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  background: var(--color-text-white);      /* #FFFFFF */
+  border-top: 1px solid var(--color-bg);    /* #BBBFBF */
+}
+
+.navbar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-decoration: none;
+  font-size: var(--font-size-xs);           /* 12px */
+  color: var(--color-text-muted);           /* #9CA3AF — apagado */
+}
+
+.navbar__item--activo {
+  color: var(--color-options);              /* #0474C4 — azul acento */
+}
+
+.navbar__icono {
+  width: 22px;
+  height: 22px;
+}
