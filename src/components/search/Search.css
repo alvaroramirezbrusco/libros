@@ -1,0 +1,158 @@
+/*  
+  Estilos del buscador
+*/
+
+.search {
+  width: 100%;
+  max-width: 480px;
+  margin: 2em auto;
+}
+
+/* Encabezado */
+
+.search-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 1rem;
+
+  border: none;
+
+  background-color: var(--color-options);
+  color: var(--color-text-light);
+
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+
+  position: relative;
+  z-index: 2;
+
+}
+
+.search--open .search-header {
+  border-radius: 10px 10px 0 0;
+}
+
+.search--closed .search-header {
+  border-radius: 10px;
+}
+
+.search-arrow {
+  font-size: var(--font-size-small);
+}
+
+
+/* Formulario */
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+
+  background-color: var(--color-bg-secondary);
+  border-radius: 0 0 10px 10px;
+
+  overflow: hidden;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.2s ease,
+    transform 0.3s ease,
+    padding 0.3s ease;
+}
+
+/* Abierto */
+
+.search-form--open {
+  max-height: 500px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* Cerrado */
+
+.search-form--closed {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-20px);
+
+  padding-top: 0;
+  padding-bottom: 0;
+
+  pointer-events: none;
+}
+
+/* Campos */
+
+.search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 100%;
+  margin: 0;
+}
+
+.search-field label {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-dark);
+  text-align: left;
+}
+
+.search-field input,
+.search-field select {
+  min-height: 44px;
+
+  padding: 0.7rem;
+
+  border: 1px solid var(--color-text-muted);
+  border-radius: 10px;
+
+  background-color: var(--color-bg);
+
+  font-size: var(--font-size-sm);
+
+  transition: border-color 0.1s ease-in-out;
+}
+
+.search-field input:focus,
+.search-field select:focus {
+  outline: none;
+  border-color: var(--color-options);
+}
+
+
+/* Botón */
+
+.search-button {
+  width: 100%;
+  min-height: 44px;
+
+  margin-top: 0.5rem;
+
+  border: none;
+  border-radius: 10px;
+
+  background-color: var(--color-options);
+  color: var(--color-text-light);
+
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+
+  transition: background-color 0.1s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.search-button:hover {
+  background-color: var(--color-options-light);
+}
+
+.search-button:active {
+  transform: scale(0.98);
+}

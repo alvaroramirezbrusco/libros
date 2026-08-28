@@ -1,0 +1,67 @@
+.book-section {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+
+/* Encabezado */
+
+.book-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 1rem;
+}
+
+.book-section__title {
+  margin: 0;
+
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+
+  color: var(--color-text-dark);
+}
+
+
+/* Controles */
+
+.book-section__controls {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.book-section__button {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background-color: var(--color-options);
+  color: var(--color-text-light);
+
+  font-size: 1.5rem;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.book-section__button:hover:not(:disabled) {
+  background-color: var(--color-options-light);
+}
+
+.book-section__button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

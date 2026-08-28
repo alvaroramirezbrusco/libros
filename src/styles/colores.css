@@ -1,16 +1,18 @@
 :root {
     /* Base */
-    --color-bg: #BBBFBF;
-    --color-bg-secondary: #878787;
+    --color-bg: #eef0f0;
+    --color-bg-secondary: #e6eceb;
     --color-surface: #05AD98;
 
     --color-options: #0474C4;
+    --color-options-light: #3982f8;
     --color-status: #ABC4EC;
 
     /* Texto */
     --color-text-white: #FFFFFF;
     --color-text-light: #E5E7EB;
     --color-text-muted: #9CA3AF;
+    --color-text-dark: #222222;
 
     /* Libros */
     --color-card: #E2EBE5;

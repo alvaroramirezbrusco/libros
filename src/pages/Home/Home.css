@@ -2,14 +2,10 @@
 
 
 /* Estilos de prueba */
+.home-content {
+  width: 90%;
+  max-width: 480px;
 
-/*
-
-@import "../../styles/colores.css";
-@import "../../styles/tipografia.css";
-
-h1 {
-    background: var(--color-bg);
+  margin: 0 auto;
+  padding-bottom: 2rem;
 }
-
-*/
