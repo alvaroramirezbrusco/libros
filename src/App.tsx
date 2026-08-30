@@ -2,7 +2,6 @@ import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import Home from './pages/Home/Home'
-import Busqueda from './pages/Busqueda/Busqueda'
 import Detalle from './pages/Detalle/Detalle'
 import ListaDeseos from './pages/ListaDeseos/ListaDeseos'
 import Historial from './pages/Historial/Historial'
@@ -17,7 +16,6 @@ export default function App() {
       <main className="app-main">
         <Routes>
           <Route path={PATHS.home} element={<Home />} />
-          <Route path={PATHS.busqueda} element={<Busqueda />} />
           <Route path={PATHS.detalle} element={<Detalle />} />
           <Route path={PATHS.listaDeseos} element={<ListaDeseos />} />
           <Route path={PATHS.historial} element={<Historial />} />

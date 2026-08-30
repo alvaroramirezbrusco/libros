@@ -87,6 +87,27 @@
   pointer-events: none;
 }
 
+/* Errores de validación */
+
+.search-errores {
+  margin: 0;
+  padding: 0.6rem 0.9rem;
+  list-style: none;
+
+  border: 1px solid #c0392b;
+  border-radius: 10px;
+
+  background-color: #fdecea;
+  color: #c0392b;
+
+  font-size: var(--font-size-small);
+}
+
+.search-errores li + li {
+  margin-top: 0.25rem;
+}
+
+
 /* Campos */
 
 .search-field {

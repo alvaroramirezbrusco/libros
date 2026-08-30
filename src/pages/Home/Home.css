@@ -9,3 +9,14 @@
   margin: 0 auto;
   padding-bottom: 2rem;
 }
+
+/* Mensajes de estado de la búsqueda (cargando / error / sin resultados) */
+.home-status {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: var(--color-text-muted);
+}
+
+.home-status--error {
+  color: #c0392b;
+}

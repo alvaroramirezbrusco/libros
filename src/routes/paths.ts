@@ -1,7 +1,6 @@
 // Rutas de la aplicación centralizadas para no repetir strings.
 export const PATHS = {
   home: '/',
-  busqueda: '/buscar',
   detalle: '/libro/:id',
   listaDeseos: '/lista-deseos',
   historial: '/historial',

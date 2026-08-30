@@ -1,6 +1,15 @@
+/* El <a> envoltorio: sin estilo propio, solo resetea el link */
 .book-card {
+  display: block;
   width: 100%;
 
+  text-decoration: none;
+  color: var(--color-text-dark);
+  text-align: left;
+}
+
+/* El <article>: acá va el aspecto visual de la tarjeta */
+.book-card__body {
   display: flex;
   flex-direction: column;
 
@@ -8,10 +17,6 @@
 
   background-color: var(--color-bg-secondary);
   border-radius: 10px;
-
-  text-decoration: none;
-  color: var(--color-text-dark);
-  text-align: left;
 }
 
 

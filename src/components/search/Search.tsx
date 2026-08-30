@@ -1,15 +1,70 @@
 import { useState } from 'react'
 import './Search.css'
 
-export default function Search() {
+// Lo que Search le entrega a Home cuando se envía el formulario.
+// Los tres campos son opcionales, el usuario puede llenar solo uno.
+export interface BusquedaParams {
+  title?: string
+  author?: string
+  subject?: string
+}
+
+// El padre (Home) le pasa QUÉ hacer cuando se envía el formulario.
+// Search solo junta lo que escribió el usuario y lo entrega hacia arriba.
+interface Props {
+  onBuscar: (params: BusquedaParams) => void
+}
+
+export default function Search({ onBuscar }: Props) {
   const [abierto, setAbierto] = useState(false)
+
+  // Un estado por cada campo del formulario ("controlled inputs"):
+  // el valor del input siempre refleja estas variables.
+  const [titulo, setTitulo] = useState('')
+  const [autor, setAutor] = useState('')
+  const [categoria, setCategoria] = useState('')
+
+  // Lista de mensajes de error de validación. Vacía = formulario OK.
+  const [errores, setErrores] = useState<string[]>([])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // Más adelante conectaremos esto con Open Library
-    // Las opciones de búsqueda se deben cambiar por datos de la API
-    console.log('Buscando...')
+    const t = titulo.trim()
+    const a = autor.trim()
+
+    // Validaciones del lado del cliente, hechas con Js
+   
+    const nuevosErrores: string[] = []
+
+    
+    if (!t && !a && !categoria) {
+      nuevosErrores.push('Completá al menos un campo para buscar.')
+    }
+    
+    if (t && t.length < 2) {
+      nuevosErrores.push('El título debe tener al menos 2 caracteres.')
+    }
+    if (a && a.length < 2) {
+      nuevosErrores.push('El autor debe tener al menos 2 caracteres.')
+    }
+    
+    if (a && /\d/.test(a)) {
+      nuevosErrores.push('El autor no puede contener números.')
+    }
+
+    setErrores(nuevosErrores)
+
+    // Si hay errores, cortamos acá: no se hace la búsqueda.
+    if (nuevosErrores.length > 0) return
+
+    // Mandamos solo los campos que tienen algo escrito.
+    
+    onBuscar({
+      title: t || undefined,// undefined evita mandar strings vacíos a la API.
+      author: a || undefined,
+      subject: categoria || undefined,
+    })
   }
 
   return (
@@ -29,7 +84,7 @@ export default function Search() {
           {abierto ? '▲' : '▼'}
         </span>
       </button>
-      
+
         <form
           className={`search-form ${
             abierto
@@ -38,6 +93,15 @@ export default function Search() {
           }`}
           onSubmit={handleSubmit}
         >
+
+          {/* Mensajes de validación (si los hay) */}
+          {errores.length > 0 && (
+            <ul className="search-errores">
+              {errores.map((msg) => (
+                <li key={msg}>{msg}</li>
+              ))}
+            </ul>
+          )}
 
           <div className="search-field">
             <label htmlFor="titulo">
@@ -48,6 +112,8 @@ export default function Search() {
               id="titulo"
               type="text"
               placeholder="Cyberspace"
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
             />
           </div>
 
@@ -61,6 +127,8 @@ export default function Search() {
               id="autor"
               type="text"
               placeholder="Miachel Benedikt"
+              value={autor}
+              onChange={(e) => setAutor(e.target.value)}
             />
           </div>
 
@@ -70,7 +138,11 @@ export default function Search() {
               Categoría
             </label>
 
-            <select id="categoria">
+            <select
+              id="categoria"
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value)}
+            >
               <option value="">
                 Todos
               </option>
@@ -91,7 +163,7 @@ export default function Search() {
                 Misterio
               </option>
 
-              <option value="science-fiction">
+              <option value="science_fiction">
                 Ciencia ficción
               </option>
             </select>

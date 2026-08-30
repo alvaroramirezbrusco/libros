@@ -1,22 +1,15 @@
 import { NavLink } from 'react-router-dom'
 
-// ============================================================
-// Navbar.tsx — Barra de navegación inferior (estilo movil)
-// ------------------------------------------------------------
-// Se muestra SIEMPRE. Se renderiza una vez desde App.tsx, fuera
-// de <Routes>, así no se recarga al cambiar de pantalla.
-//
+
+// Navbar.tsx — Barra de navegación inferior (estilo movil despues trabajareemos en responsive)
+
+
 // Cada botón es un <NavLink> de react-router:
-//   - cambia la URL sin recargar la web
-//   - nos avisa si su ruta es la "activa" para pintarla distinto
-// ------------------------------------------------------------
+//   - cambia la URL sin recargar la web -- nos avisa si su ruta es la "activa" para pintarla distinto
 
 
-
-// Importamos cada SVG como COMPONENTE gracias al sufijo "?react"
-// (lo procesa vite-plugin-svgr). Sin "?react" sería solo una URL.
+// Importamos cada SVG como COMPONENTE gracias al sufijo "?react" (lo procesa vite-plugin-svgr). Sin "?react" 
 import HomeIcon   from '../../assets/icons/home.svg?react'
-import SearchIcon from '../../assets/icons/search.svg?react'
 import HeartIcon  from '../../assets/icons/heart.svg?react'
 import ClockIcon  from '../../assets/icons/clock.svg?react'
 import MailIcon   from '../../assets/icons/email.svg?react'
@@ -24,11 +17,10 @@ import MailIcon   from '../../assets/icons/email.svg?react'
 import { PATHS } from '../../routes/paths'
 import './Navbar.css'
 
-// Los ítems como array: así no repetimos el mismo JSX 5 veces,
+// Los ítems como array: así no repetimos el mismo JSX cantidad de paginas ,
 // lo recorremos con .map()
 const items = [
   { to: PATHS.home,        Icono: HomeIcon,   label: 'Inicio' },
-  { to: PATHS.busqueda,    Icono: SearchIcon, label: 'Buscar' },
   { to: PATHS.listaDeseos, Icono: HeartIcon,  label: 'Deseos' },
   { to: PATHS.historial,   Icono: ClockIcon,  label: 'Historial' },
   { to: PATHS.contacto,    Icono: MailIcon,   label: 'Contacto' },
