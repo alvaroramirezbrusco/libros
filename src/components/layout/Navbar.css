@@ -15,8 +15,10 @@
   justify-content: space-around;
   align-items: center;
   padding: 8px 0;
-  background: var(--color-text-white);      /* #FFFFFF */
-  border-top: 1px solid var(--color-bg);    /* #BBBFBF */
+  background: var(--color-bg-secondary);     
+  border-top: 1px solid var(--color-surface);    /* #BBBFBF */
+
+  z-index: 1000;                 /* por encima de todo, incluso modales */
 }
 
 .navbar__item {

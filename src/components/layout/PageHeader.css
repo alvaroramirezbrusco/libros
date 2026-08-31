@@ -4,27 +4,58 @@
    ---------------------------------------------------------- */
 
 .page-header {
+  position: relative;
+
+  width: 100%;
+  min-height: 56px;
+
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+
   padding: 12px 14px;
+
   background: var(--color-options);          /* #0474C4 — azul*/
-  color: var(--color-text-white);           /* #FFFFFF */
-  font-size: var(--font-size-sm);            /* 14px */
-  font-weight: var(--font-weight-medium);    /* 500 */
 }
+
+.page-header__titulo {
+  margin: 0;
+
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-white);
+
+  text-align: center;
+}
+
 
 /* Botón de volver: sin fondo ni borde, solo el ícono */
 .page-header__volver {
+  position: absolute;
+
+  left: 14px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
   padding: 0;
+
   border: none;
   background: none;
-  color: inherit;      /* hereda el blanco del .page-header */
+
+  color: inherit; /* hereda el blanco del .page-header */
+
   cursor: pointer;
 }
 
 .page-header__icono {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
 }

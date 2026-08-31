@@ -35,7 +35,7 @@ export default function PageHeader({ titulo, volver = true }: Props) {
           <ArrowLeftIcon className="page-header__icono" aria-hidden="true" />
         </button>
       )}
-      <span className="page-header__titulo">{titulo}</span>
+      <h1 className="page-header__titulo">{titulo}</h1>
     </header>
   )
 }

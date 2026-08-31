@@ -60,6 +60,11 @@ export default function Home() {
     query.set('page', String(page))
     query.set('limit', String(LIMITE))
 
+    query.set(
+      'fields',
+      'key,title,subtitle,author_name,first_publish_year,cover_i,publisher,subject,language,number_of_pages_median,ratings_average,ratings_count'
+    )
+
     setCargando(true)
     setError(null)
 

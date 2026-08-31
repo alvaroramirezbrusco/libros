@@ -135,6 +135,7 @@
   border-radius: 10px;
 
   background-color: var(--color-bg);
+  color: var(--color-text-white);
 
   font-size: var(--font-size-sm);
 
@@ -145,6 +146,11 @@
 .search-field select:focus {
   outline: none;
   border-color: var(--color-options);
+}
+
+.search-field select option {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-white);
 }
 
 
