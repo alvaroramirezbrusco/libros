@@ -11,16 +11,36 @@
 import { useNavigate } from 'react-router-dom'
 import ArrowLeftIcon from '../../assets/icons/arrow-left.svg?react'
 import './PageHeader.css'
+import { PATHS } from '../../routes/paths'
 
 // Props que recibe el componente:
 interface Props {
   titulo: string          // texto que se muestra al lado de la flecha
   volver?: boolean         // ¿mostrar la flecha? por defecto sí.
-                           //   en Home la ocultamos con volver={false}
+  estadoHome?: {              //   en Home la ocultamos con volver={false}
+  pagina: number
+  filtros: {
+    title?: string
+    author?: string
+    subject?: string
+    }
+  }
 }
 
-export default function PageHeader({ titulo, volver = true }: Props) {
+export default function PageHeader({ titulo, volver = true, estadoHome }: Props) {
   const navigate = useNavigate()
+
+  function volverPagina() {
+    if (estadoHome) {
+      navigate(PATHS.home, {
+        state: {
+          restaurarHome: estadoHome
+        }
+      })
+    } else {
+      navigate(-1)
+    }
+  }
 
   return (
     <header className="page-header">
@@ -29,7 +49,7 @@ export default function PageHeader({ titulo, volver = true }: Props) {
         <button
           type="button"
           className="page-header__volver"
-          onClick={() => navigate(-1)}
+          onClick={volverPagina}
           aria-label="Volver"
         >
           <ArrowLeftIcon className="page-header__icono" aria-hidden="true" />

@@ -24,7 +24,7 @@ export default function Pagination({
         onClick={onAnterior}
         disabled={pagina <= 1}
       >
-        Anterior
+        ‹
       </button>
 
       <span className="pagination__info">
@@ -37,7 +37,7 @@ export default function Pagination({
         onClick={onSiguiente}
         disabled={pagina >= totalPaginas}
       >
-        Siguiente
+        ›
       </button>
 
     </nav>

@@ -19,7 +19,4 @@
   padding-bottom: 64px;   /* lugar para la navbar fija */
 }
 
-.navbar {
-  display: flex;
-  gap: 16px;
-}
+

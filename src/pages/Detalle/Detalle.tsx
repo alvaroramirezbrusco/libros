@@ -1,5 +1,6 @@
 import PageHeader from '../../components/layout/PageHeader'
 import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import './Detalle.css'
 import type { Book } from '../../types/book'
 
@@ -7,10 +8,19 @@ export default function Detalle() {
   const location = useLocation()
 
   const libro = location.state?.libro as Book | undefined
+  const estadoHome = location.state?.estadoHome
 
+    useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+  
   return (
     <section className="page page-detalle">
-      <PageHeader titulo="Detalle" volver={true} />
+      <PageHeader
+        titulo="Detalle"
+        volver={true}
+        estadoHome={estadoHome}
+      />
 
       <article className="book-detail">
 
