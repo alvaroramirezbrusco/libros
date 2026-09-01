@@ -1,15 +1,44 @@
 import PageHeader from '../../components/layout/PageHeader'
 import { useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './Detalle.css'
 import type { Book } from '../../types/book'
+import type { ItemDeseo } from '../../types/deseo'
+import { agregarListaDeseos } from '../../services/listaDeseos'
+import FormularioDeseo from '../../components/deseos/FormularioDeseo'
+import  {registrarVisita } from '../../services/historial'
 
 export default function Detalle() {
   const location = useLocation()
 
   const libro = location.state?.libro as Book | undefined
   const estadoHome = location.state?.estadoHome
+  const [formAbierto, setFormAbierto] = useState(false)
+  const [confirmado, setConfirmado] = useState(false)
+//registramos automaticamente la visita al libro en el historial de visitas
+  useEffect(() => {
+    if (libro) {
+      registrarVisita(libro)
+    }
+  }, [libro])
+  
+  function handleConfirmar(datos: { prioridad: number; etiqueta: string; nota?: string }) {
+    if (!libro) return
 
+    const item:ItemDeseo = {
+      id: libro.id,
+      title: libro.title,
+      cover: libro.cover,
+      authors: libro.authors,
+      prioridad: datos.prioridad,
+      etiqueta: datos.etiqueta,
+      nota: datos.nota,
+    }
+    
+    agregarListaDeseos(item)
+    setFormAbierto(false)
+    setConfirmado(true)
+  }
     useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -58,9 +87,13 @@ export default function Detalle() {
               <button
                 type="button"
                 className="book-detail__favorite"
-                aria-label="Agregar a favoritos"
+                aria-label="Agregar a la lista de deseos"
+                onClick={() => {
+                  setConfirmado(false)
+                  setFormAbierto(true)
+                }}
               >
-                Agregar a favoritos
+                Agregar a la lista de deseos
               </button>
 
             </div>
@@ -84,6 +117,19 @@ export default function Detalle() {
           </div>
 
         </header>
+
+        {formAbierto && (
+          <FormularioDeseo
+            onConfirmar={handleConfirmar}
+            onCancelar={() => setFormAbierto(false)}
+          />
+        )}
+
+        {confirmado && (
+          <p className="book-detail__confirmacion">
+            ✓ Agregado a tu lista de deseos.
+          </p>
+        )}
 
         <section className="book-detail__info">
           <h2>Descripción</h2>
