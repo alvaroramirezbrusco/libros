@@ -8,17 +8,11 @@
   text-align: left;
 }
 
-
-/* =========================
-   HEADER
-   ========================= */
-
 .book-detail__header {
   position: relative;
   overflow: hidden;
   min-height: 330px;
 }
-
 
 /* Imagen de fondo */
 
@@ -35,9 +29,7 @@
   opacity: 0.55;
 }
 
-
-/* Oscurece y hace que el fondo se funda
-   con el contenido de abajo */
+/* Fondo oscuro */
 
 .book-detail__header::after {
   content: "";
@@ -50,7 +42,7 @@
       to bottom,
       rgba(0, 0, 0, 0.15) 0%,
       rgba(0, 0, 0, 0.25) 45%,
-      var(--color-bg-secondary) 100%
+      var(--color-bg) 100%
     );
 }
 
@@ -70,15 +62,12 @@
 }
 
 
-/* =========================
-   PORTADA
-   ========================= */
+/* Portada */
 
 .book-detail__cover-container {
   width: 42%;
   flex-shrink: 0;
 }
-
 
 .book-detail__cover {
   width: 100%;
@@ -86,10 +75,7 @@
 
   overflow: hidden;
 
-  border-radius: 0.75rem;
-
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.35);
+  border-radius: 0.5rem;
 }
 
 
@@ -123,9 +109,7 @@
 }
 
 
-/* =========================
-   FAVORITOS
-   ========================= */
+/* Lista de deseos */
 
 .book-detail__favorite {
   width: 100%;
@@ -139,13 +123,33 @@
 
   cursor: pointer;
 
-  background-color: var(--color-options);
+  background-color: transparent;
+  border: 1px solid var(--color-options-light);
 
-  color: var(--color-text-white);
+  color: var(--color-options-light);
+  font-weight: var(--font-weight-light);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
 
-  font-size: 0.8rem;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
+.book-detail__favorite:hover {
+  background-color: var(--color-options-light);
+  color: var(--color-text-dark);
+}
+
+.book-detail__favorite--remove {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.book-detail__favorite--remove:hover {
+  background-color: var(--color-danger);
+  color: var(--color-text-white);
+}
 
 .book-detail__confirmacion {
   margin: 1rem 0 0;
@@ -171,45 +175,28 @@
 }
 
 
-.book-detail__title h1 {
+.book-detail__title h2 {
   margin: 0;
 
-  color: white;
-
+  color: var(--color-text-white);
   font-size: var(--font-size-xl);
-
   font-weight: var(--font-weight-semibold);
-
-  line-height: 1.2;
+  line-height: 1.1;
 }
-
-
-.book-detail__subtitle {
-  margin: 0.5rem 0 0;
-
-  color: rgba(255, 255, 255, 0.8);
-
-  font-size: 0.9rem;
-}
-
 
 .book-detail__author {
   margin: 0.75rem 0 0;
 
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-text-light);
 
-  font-size: 0.95rem;
+  font-size: var(--font-size-semibase);
 }
 
-
-/* =========================
-   INFORMACIÓN
-   ========================= */
+/* Información */
 
 .book-detail__info,
 .book-detail__data {
   padding: 0 1rem;
-
   margin-top: 1.5rem;
 }
 
@@ -217,9 +204,7 @@
 .book-detail__info h2,
 .book-detail__data h2 {
   margin-bottom: 0.75rem;
-
   color: var(--color-text-dark);
-
   font-size: var(--font-size-lg);
 }
 
@@ -227,9 +212,7 @@
 .book-detail__info p,
 .book-detail__data p {
   margin: 0.35rem 0;
-
   color: var(--color-text-dark);
-
   line-height: 1.5;
 }
 

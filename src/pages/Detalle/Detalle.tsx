@@ -1,41 +1,41 @@
-import PageHeader from '../../components/layout/PageHeader'
+// *Vista de detalle de un libro.*
+// *Muestra su información y permite agregarlo o quitarlo de la lista de deseos.*
+
 import { useLocation, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useLibro } from '../../hooks/useLibro'
+
 import './Detalle.css'
+import Loader from '../../components/ui/Loader'
+import Toast from '../../components/ui/Toast'
+import ConfirmAlert from '../../components/ui/ConfirmAlert'
 
-import type { BookDetail } from '../../types/book'
+import PageHeader from '../../components/layout/PageHeader'
+
 import type { ItemDeseo } from '../../types/deseo'
-
 import { agregarListaDeseos, eliminarListaDeseos, estaEnListaDeseos } from '../../services/listaDeseos'
 import FormularioDeseo from '../../components/deseos/FormularioDeseo'
 import  {registrarVisita } from '../../services/historial'
-
-interface OpenLibraryWork {
-  title?: string
-  description?: string | { value: string }
-  covers?: number[]
-  subjects?: string[]
-  authors?: {
-    author?: {
-      key?: string
-    }
-  }[]
-}
 
 export default function Detalle() {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
 
   const estadoHome = location.state?.estadoHome
-  
-  
-  const [libro, setLibro] = useState<BookDetail | null>(null)
-  const [cargando, setCargando] = useState(true)
-  const [error, setError] = useState<string | null>(null)
- const [enLista, setEnLista] = useState(false)
+
+  const {
+    libro,
+    cargando,
+    error
+  } = useLibro(id)
+
+  const [enLista, setEnLista] = useState(false)
   const [formAbierto, setFormAbierto] = useState(false)
-  const [confirmado, setConfirmado] = useState(false)
- //registramos automaticamente la visita al libro en el historial de visitas
+  const [toastVisible, setToastVisible] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
+  const [confirmarEliminar, setConfirmarEliminar] = useState(false)
+  
+  // *Registra automáticamente la visita al libro en el historial.*
   useEffect(() => {
     if (libro) {
       registrarVisita(libro)
@@ -56,118 +56,23 @@ export default function Detalle() {
     }
     
     agregarListaDeseos(item)
+
     setFormAbierto(false)
-    setConfirmado(true)
     setEnLista(true)
+
+    //Mensaje de confirmación para el usuario
+    setToastMessage('Agregado a tu lista de deseos.')
+    setToastVisible(true)
   }
-    useEffect(() => {
+
+  useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
-  
+
   useEffect(() => {
-    async function cargarLibro() {
-      if (!id) {
-        setError('No se encontró el ID del libro.')
-        setCargando(false)
-        return
-      }
-
-      try {
-        setCargando(true)
-        setError(null)
-
-        const [respuestaWork, respuestaEdiciones] = await Promise.all([
-          fetch(`https://openlibrary.org/works/${id}.json`),
-
-          fetch(
-            `https://openlibrary.org/works/${id}/editions.json?limit=1`
-          ),
-        ])
-
-        if (!respuestaWork.ok) {
-          throw new Error(`Error obteniendo el Work: HTTP ${respuestaWork.status}`)
-        }
-
-        if (!respuestaEdiciones.ok) {
-          throw new Error(
-            `Error obteniendo las ediciones: HTTP ${respuestaEdiciones.status}`
-          )
-        }
-
-        const datosWork: OpenLibraryWork = await respuestaWork.json()
-        const datosEdiciones = await respuestaEdiciones.json()
-
-        const edicion = datosEdiciones.entries?.[0]
-
-        // Descripción
-        const descripcion =
-          typeof datosWork.description === 'string'
-            ? datosWork.description
-            : datosWork.description?.value ?? null
-
-        // Autores
-        const autores = datosWork.authors ?? []
-
-        const nombresAutores: string[] = []
-
-        for (const autor of autores) {
-          if (!autor.author?.key) continue
-
-          const respuestaAutor = await fetch(
-            `https://openlibrary.org${autor.author.key}.json`
-          )
-
-          if (respuestaAutor.ok) {
-            const datosAutor = await respuestaAutor.json()
-
-            if (datosAutor.name) {
-              nombresAutores.push(datosAutor.name)
-            }
-          }
-        }
-
-        const libroDetalle: BookDetail = {
-          id,
-          title: datosWork.title ?? '',
-          authors: nombresAutores,
-          cover: datosWork.covers?.[0]
-            ? `https://covers.openlibrary.org/b/id/${datosWork.covers[0]}-L.jpg`
-            : null,
-          rating: null,
-          ratingCount: null,
-          description: descripcion,
-          year: edicion?.publish_date
-            ? Number(edicion.publish_date.match(/\d{4}/)?.[0]) || null
-            : null,
-          publisher: edicion?.publishers?.[0] ?? null,
-          publishers: edicion?.publishers ?? [],
-          categories: [
-            ...new Set(
-              (datosWork.subjects ?? [])
-                .flatMap((categoria) => categoria.split(','))
-                .map((categoria) => categoria.trim())
-                .filter(Boolean)
-            )
-          ].slice(0, 10),
-          pages: edicion?.number_of_pages ?? null,
-          language:
-            edicion?.languages?.map(
-              (idioma: { key: string }) =>
-                idioma.key.split('/').pop() ?? ''
-            ) ?? [],
-        }
-
-        setLibro(libroDetalle)
-        setEnLista(estaEnListaDeseos(id))
-      } catch (error) {
-        console.error('Error obteniendo el libro:', error)
-        setError('No se pudo cargar el libro.')
-      } finally {
-        setCargando(false)
-      }
+    if (id) {
+      setEnLista(estaEnListaDeseos(id))
     }
-
-    cargarLibro()
   }, [id])
 
   if (cargando) {
@@ -178,7 +83,8 @@ export default function Detalle() {
           volver={true}
           estadoHome={estadoHome}
         />
-        <p className="book-detail__status">Cargando libro...</p>
+
+        <Loader />
       </section>
     )
   }
@@ -205,6 +111,29 @@ export default function Detalle() {
         volver={true}
         estadoHome={estadoHome}
       />
+
+      {toastVisible && (
+        <Toast
+          message={toastMessage}
+          onClose={() => setToastVisible(false)}
+        />
+      )}
+
+      {confirmarEliminar && (
+        <ConfirmAlert
+          mensaje="¿Querés quitar este libro de tu lista de deseos?"
+          onCancelar={() => setConfirmarEliminar(false)}
+          onConfirmar={() => {
+            eliminarListaDeseos(libro.id)
+
+            setEnLista(false)
+            setConfirmarEliminar(false)
+
+            setToastMessage('Quitado de tu lista de deseos.')
+            setToastVisible(true)
+          }}
+        />
+      )}
 
       <article className="book-detail">
 
@@ -242,28 +171,28 @@ export default function Detalle() {
               {/* Lista de deseos */}
               <button
                 type="button"
-                className="book-detail__favorite"
+                className={`book-detail__favorite ${
+                  enLista ? 'book-detail__favorite--remove' : ''
+                }`}
                 aria-label={enLista ? "Quitar de la lista de deseos" : "Agregar a la lista de deseos"}
                 onClick={() => {
                   if (enLista) {
-                    eliminarListaDeseos(libro.id)
-                    setEnLista(false)
-                    setConfirmado(false)
+                    setConfirmarEliminar(true)
                   } else {
-                    
                     setFormAbierto(true)
                   }
-                 
                 }}
               >
-                {enLista ? 'Quitar de la lista de deseos' : 'Agregar a la lista de deseos'}
+                {enLista
+                  ? 'Quitar de la lista de deseos'
+                  : 'Agregar a la lista de deseos'}
               </button>
             </div>
 
             {/* Información principal */}
             <div className="book-detail__title">
 
-              <h1>{libro.title}</h1>
+              <h2>{libro.title}</h2>
 
               <p className="book-detail__author">
                 de {libro.authors.join(', ') || 'Autor desconocido'}
@@ -287,12 +216,6 @@ export default function Detalle() {
             onConfirmar={handleConfirmar}
             onCancelar={() => setFormAbierto(false)}
           />
-        )}
-
-        {confirmado && (
-          <p className="book-detail__confirmacion">
-             Agregado a tu lista de deseos.
-          </p>
         )}
 
         {/* Descripción */}

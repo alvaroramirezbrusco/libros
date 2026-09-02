@@ -7,7 +7,7 @@
   position: relative;
 
   width: 100%;
-  min-height: 56px;
+  height: var(--page-header-height);
 
   display: flex;
   align-items: center;
