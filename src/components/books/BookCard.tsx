@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import type { Book } from '../../types/book'
+import type { BookPreview } from '../../types/book'
 import './BookCard.css'
 
 interface Props {
-  libro: Book
+  libro: BookPreview
 }
 
 export default function BookCard({ libro }: Props) {

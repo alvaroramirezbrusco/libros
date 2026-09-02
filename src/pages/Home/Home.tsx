@@ -5,7 +5,7 @@ import type { BusquedaParams } from '../../components/search/Search'
 import BookSection from '../../components/books/BookSection'
 import BookList from '../../components/books/BookList'
 import Pagination from '../../components/books/Pagination'
-import type { Book } from '../../types/book'
+import type { BookPreview } from '../../types/book'
 import './Home.css'
 
 const API_URL = 'https://openlibrary.org/search.json' // URL del endpoint de búsqueda de Open Library.
@@ -28,14 +28,8 @@ const CATEGORIAS = [
 interface OpenLibraryDoc {
   key: string
   title: string
-  subtitle?: string
   author_name?: string[]
-  first_publish_year?: number
   cover_i?: number
-  publisher?: string[]
-  subject?: string[]
-  language?: string[]
-  number_of_pages_median?: number
   ratings_average?: number
   ratings_count?: number
 }
@@ -47,44 +41,25 @@ interface OpenLibraryResponse {
 }
 
 // Convierte el formato de Open Library a nuestro formato Book
-function convertirLibro(doc: OpenLibraryDoc): Book {
+function convertirLibro(doc: OpenLibraryDoc): BookPreview {
   return {
     id: doc.key.replace('/works/', ''),
     title: doc.title,
-    subtitle: doc.subtitle ?? null,
     authors: doc.author_name ?? [],
-    description: null,
-
     cover: doc.cover_i
       ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`
       : null,
-
-    year: doc.first_publish_year ?? null,
-
-    publisher: doc.publisher?.[0] ?? null,
-    publishers: doc.publisher ?? [],
-
-    isbn10: [],
-    isbn13: [],
-
-    categories: (doc.subject ?? []).slice(0, 5),
-    subjects: doc.subject ?? [],
-
     rating: doc.ratings_average ?? null,
     ratingCount: doc.ratings_count ?? null,
-
-    pages: doc.number_of_pages_median ?? null,
-
-    language: doc.language ?? [],
   }
 }
 
 export default function Home() {
   //  Estado de la pantalla 
-  const [libros, setLibros] = useState<Book[]>([]) // resultados
+  const [libros, setLibros] = useState<BookPreview[]>([]) // resultados
   
   const [librosPorCategoria, setLibrosPorCategoria] =
-    useState<Record<string, Book[]>>({})
+    useState<Record<string, BookPreview[]>>({})
 
   const [cargandoCategorias, setCargandoCategorias] = useState(true)
 
@@ -112,7 +87,7 @@ export default function Home() {
 
     query.set(
       'fields',
-      'key,title,subtitle,author_name,first_publish_year,cover_i,publisher,subject,language,number_of_pages_median,ratings_average,ratings_count'
+      'key,title,author_name,cover_i,ratings_average,ratings_count'
     )
 
     setCargando(true)
@@ -141,7 +116,7 @@ export default function Home() {
 
       // La API devuelve sus campos con otros nombres (doc.author_name,
       // doc.cover_i, etc). Acá los pasamos a nuestro tipo `Book`.
-      const resultado: Book[] = datos.docs.map(convertirLibro)
+      const resultado: BookPreview[] = datos.docs.map(convertirLibro)
 
       setLibros(resultado)
       setPagina(page)      // recordamos en qué página quedamos
@@ -180,7 +155,7 @@ export default function Home() {
 
     query.set(
       'fields',
-      'key,title,subtitle,author_name,first_publish_year,cover_i,publisher,subject,language,number_of_pages_median,ratings_average,ratings_count'
+      'key,title,author_name,cover_i,ratings_average,ratings_count'
     )
 
     try {
@@ -192,7 +167,7 @@ export default function Home() {
 
       const datos: OpenLibraryResponse = await respuesta.json()
 
-      const resultado: Book[] = datos.docs.map(convertirLibro)
+      const resultado: BookPreview[] = datos.docs.map(convertirLibro)
 
       setLibrosPorCategoria((actual) => ({
         ...actual,

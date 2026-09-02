@@ -1,12 +1,19 @@
-// Información completa de un libro, la idea es modificarlo para tener
-// diferentes interfaces según que necesite (simple o detalles)
+// Información mínima utilizada para listados y tarjetas
+export interface BookPreview {
+  id: string
+  title: string
+  authors: string[]
+  cover: string | null
+  rating: number | null
+  ratingCount: number | null
+}
 
-export interface Book {
+// Información completa utilizada en la vista de detalle
+export interface BookDetail {
   id: string
 
   // Información principal
   title: string
-  subtitle: string | null
   authors: string[]
   description: string | null
 
@@ -17,12 +24,9 @@ export interface Book {
   year: number | null
   publisher: string | null
   publishers: string[]
-  isbn10: string[]
-  isbn13: string[]
 
   // Clasificación
   categories: string[]
-  subjects: string[]
 
   // Métricas
   rating: number | null
