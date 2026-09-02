@@ -1,26 +1,35 @@
-import type {BookDetail} from '../types/book'
-import type {ItemHistorial} from '../types/historial'
+import type { BookDetail } from '../types/book'
+import type { ItemHistorial } from '../types/historial'
 
 const CLAVE = 'historial'
-const MAXIMO = 10 //para que no creca tanto dejamos en 10
 
+// *Obtiene todos los libros guardados en el historial.*
 export function leerHistorial(): ItemHistorial[] {
-    const guardado = localStorage.getItem(CLAVE)
-    if (!guardado) return []
+  const guardado = localStorage.getItem(CLAVE)
+  if (!guardado) return []
+  try {
+    return JSON.parse(guardado) as ItemHistorial[]
+  } catch {
+    return []
+  }
+}
 
-    try{
-      return JSON.parse(guardado) as ItemHistorial[]
-    }catch{  
-        return []
-    }
-} 
-export function registrarVisita(libro: BookDetail){
-    const actuales = leerHistorial()
-    //lo sacamos de la lista si ya estaba para que no se repita
-    const sinRepetir = actuales.filter((i) => i.libro.id !== libro.id)
-    
-    //lo agregamos al principio(el mas reciente primero) y lo guardamos
-    const nuevo: ItemHistorial = {libro,visitados: Date.now()}
-    const lista = [nuevo,...sinRepetir].slice(0,MAXIMO)
-    localStorage.setItem(CLAVE, JSON.stringify(lista))
+// *Registra una nueva visita en el historial.*
+export function registrarVisita(libro: BookDetail) {
+  const actuales = leerHistorial()
+  // *Sacamos el libro de la lista si ya estaba para que no se repita.*
+  const sinRepetir = actuales.filter(
+    (i) => i.libro.id !== libro.id
+  )
+  // *Lo agregamos al principio porque es el más reciente.*
+  const nuevo: ItemHistorial = {
+    libro,
+    visitados: Date.now()
+  }
+  // *Guardamos todos los libros, sin limitar la cantidad.*
+  const lista = [nuevo, ...sinRepetir]
+  localStorage.setItem(
+    CLAVE,
+    JSON.stringify(lista)
+  )
 }

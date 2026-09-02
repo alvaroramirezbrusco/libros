@@ -222,9 +222,9 @@ export default function Detalle() {
         <section className="book-detail__info">
           <div className="book-detail__block">
             <strong>Descripción</strong>
-            <p>
-              {libro.description ?? 'No disponible'}
-            </p>
+              <p className="book-detail__description">
+                {libro.description ?? 'No disponible'}
+              </p>
           </div>
         </section>
 

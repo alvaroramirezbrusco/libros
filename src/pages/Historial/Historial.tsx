@@ -1,53 +1,72 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useMemo, useState } from 'react'
+
 import PageHeader from '../../components/layout/PageHeader'
+import BookList from '../../components/books/BookList'
+import Pagination from '../../components/books/Pagination'
+
 import { leerHistorial } from '../../services/historial'
-import { detallePath } from '../../routes/paths'
+
+import { usePagination } from '../../hooks/usePagination'
+
 import './Historial.css'
 
+const LIBROS_POR_PAGINA = 10
+
 export default function Historial() {
-  // La función se ejecuta una sola vez, al crear el estado: lee lo que
-  // haya guardado en localStorage. El service ya lo devuelve ordenado
-  // con el más reciente primero.
+  // *Lee el historial una sola vez al crear el estado.*
+  // *El service ya devuelve los libros ordenados del más reciente al más antiguo.*
   const [items] = useState(() => leerHistorial())
+
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(items.length / LIBROS_POR_PAGINA)
+  )
+
+  const {
+    pagina,
+    irAnterior,
+    irSiguiente,
+  } = usePagination(totalPaginas)
+
+  // *Obtiene solamente los libros correspondientes a la página actual.*
+  const librosPagina = useMemo(() => {
+    const inicio = (pagina - 1) * LIBROS_POR_PAGINA
+    const fin = inicio + LIBROS_POR_PAGINA
+
+    return items
+      .slice(inicio, fin)
+      .map((item) => item.libro)
+  }, [items, pagina])
 
   return (
     <section className="page page-historial">
-      <PageHeader titulo="Historial" volver={true} />
 
-      {items.length === 0 ? (
-        <p className="historial__vacio">Todavía no visitaste ningún libro.</p>
-      ) : (
-        <ul className="historial__items">
-          {items.map((item) => (
-            <li key={item.libro.id} className="historial__item">
-              <Link
-                to={detallePath(item.libro.id)}
-                state={{ libro: item.libro }}
-                className="historial__link"
-              >
-                <div className="historial__cover">
-                  {item.libro.cover ? (
-                    <img
-                      src={item.libro.cover}
-                      alt={`Portada de ${item.libro.title}`}
-                    />
-                  ) : (
-                    <div className="historial__no-cover">Sin portada</div>
-                  )}
-                </div>
+      <PageHeader
+        titulo="Historial"
+        volver={true}
+      />
 
-                <div className="historial__info">
-                  <h2 className="historial__titulo">{item.libro.title}</h2>
-                  <p className="historial__autor">
-                    de {item.libro.authors.join(', ')}
-                  </p>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <section className="historial-content">
+
+        {items.length === 0 ? (
+          <p className="historial__vacio">
+            Todavía no visitaste ningún libro.
+          </p>
+        ) : (
+          <>
+            <BookList libros={librosPagina} />
+
+            <Pagination
+              pagina={pagina}
+              totalPaginas={totalPaginas}
+              onAnterior={irAnterior}
+              onSiguiente={irSiguiente}
+            />
+          </>
+        )}
+
+      </section>
+
     </section>
   )
 }

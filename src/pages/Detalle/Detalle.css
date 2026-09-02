@@ -164,9 +164,7 @@
 }
 
 
-/* =========================
-   TITULO
-   ========================= */
+/* Titulo */
 
 .book-detail__title {
   flex: 1;
@@ -238,4 +236,11 @@
 
 .book-detail__block-span {
   color: var(--color-options-light);
+}
+
+.book-detail__description {
+  margin: 0.35rem 0;
+  color: var(--color-text-dark);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
