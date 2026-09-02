@@ -6,6 +6,7 @@ import type { ItemDeseo } from '../types/deseo'
 
 const CLAVE = 'listaDeseos'
 
+
 // Devuelve la lista guardada (o [] si no hay nada / el JSON está roto).
 export function leerListaDeseos(): ItemDeseo[] {
   const guardado = localStorage.getItem(CLAVE)
@@ -21,10 +22,15 @@ export function leerListaDeseos(): ItemDeseo[] {
 // Agrega un ítem al final de la lista y guarda todo de nuevo.
 export function agregarListaDeseos(item: ItemDeseo) {
   const actuales = leerListaDeseos()
-  actuales.push(item)
-  localStorage.setItem(CLAVE, JSON.stringify(actuales))
+  const sinDuplicar = actuales.filter((i) => i.id !== item.id)
+  sinDuplicar.push(item)
+  localStorage.setItem(CLAVE, JSON.stringify(sinDuplicar))
+  
 }
-
+// Devuelve true si el id está en la lista de deseos, false si no.
+export function estaEnListaDeseos(id: string): boolean {
+  return leerListaDeseos().some((i) => i.id === id)
+}
 // Saca de la lista el ítem con ese id y guarda el resto.
 export function eliminarListaDeseos(id: string) {
   const actuales = leerListaDeseos()

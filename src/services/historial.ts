@@ -1,4 +1,4 @@
-import type {Book} from '../types/book'
+import type {BookDetail} from '../types/book'
 import type {ItemHistorial} from '../types/historial'
 
 const CLAVE = 'historial'
@@ -14,7 +14,7 @@ export function leerHistorial(): ItemHistorial[] {
         return []
     }
 } 
-export function registrarVisita(libro: Book){
+export function registrarVisita(libro: BookDetail){
     const actuales = leerHistorial()
     //lo sacamos de la lista si ya estaba para que no se repita
     const sinRepetir = actuales.filter((i) => i.libro.id !== libro.id)

@@ -6,7 +6,7 @@ import './Detalle.css'
 import type { BookDetail } from '../../types/book'
 import type { ItemDeseo } from '../../types/deseo'
 
-import { agregarListaDeseos } from '../../services/listaDeseos'
+import { agregarListaDeseos, eliminarListaDeseos, estaEnListaDeseos } from '../../services/listaDeseos'
 import FormularioDeseo from '../../components/deseos/FormularioDeseo'
 import  {registrarVisita } from '../../services/historial'
 
@@ -27,14 +27,15 @@ export default function Detalle() {
   const location = useLocation()
 
   const estadoHome = location.state?.estadoHome
-
+  
+  
   const [libro, setLibro] = useState<BookDetail | null>(null)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
+ const [enLista, setEnLista] = useState(false)
   const [formAbierto, setFormAbierto] = useState(false)
   const [confirmado, setConfirmado] = useState(false)
-//registramos automaticamente la visita al libro en el historial de visitas
+ //registramos automaticamente la visita al libro en el historial de visitas
   useEffect(() => {
     if (libro) {
       registrarVisita(libro)
@@ -57,6 +58,7 @@ export default function Detalle() {
     agregarListaDeseos(item)
     setFormAbierto(false)
     setConfirmado(true)
+    setEnLista(true)
   }
     useEffect(() => {
     window.scrollTo(0, 0)
@@ -156,6 +158,7 @@ export default function Detalle() {
         }
 
         setLibro(libroDetalle)
+        setEnLista(estaEnListaDeseos(id))
       } catch (error) {
         console.error('Error obteniendo el libro:', error)
         setError('No se pudo cargar el libro.')
@@ -240,13 +243,20 @@ export default function Detalle() {
               <button
                 type="button"
                 className="book-detail__favorite"
-                aria-label="Agregar a la lista de deseos"
+                aria-label={enLista ? "Quitar de la lista de deseos" : "Agregar a la lista de deseos"}
                 onClick={() => {
-                  setConfirmado(false)
-                  setFormAbierto(true)
+                  if (enLista) {
+                    eliminarListaDeseos(libro.id)
+                    setEnLista(false)
+                    setConfirmado(false)
+                  } else {
+                    
+                    setFormAbierto(true)
+                  }
+                 
                 }}
               >
-                Agregar a la lista de deseos
+                {enLista ? 'Quitar de la lista de deseos' : 'Agregar a la lista de deseos'}
               </button>
             </div>
 
@@ -281,7 +291,7 @@ export default function Detalle() {
 
         {confirmado && (
           <p className="book-detail__confirmacion">
-            ✓ Agregado a tu lista de deseos.
+             Agregado a tu lista de deseos.
           </p>
         )}
 
