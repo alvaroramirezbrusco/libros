@@ -23,7 +23,7 @@ import './Contacto.css'
 const LON = -57.9536
 const LAT = -34.9215
 
-// Pin genérico de mapa (SVG en data URI, sin depender de assets externos)
+
 const PIN_SVG =
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(
@@ -35,10 +35,10 @@ const PIN_SVG =
 
 export default function Contacto() {
   const mapaRef = useRef<HTMLDivElement>(null)
-  const cartelRef = useRef<HTMLDivElement>(null)
+  // const cartelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!mapaRef.current || !cartelRef.current) return
+    if (!mapaRef.current) return
 
     const centro = fromLonLat([LON, LAT])
 
@@ -51,12 +51,12 @@ export default function Contacto() {
     )
 
     // Cartel fijo apoyado sobre el marcador
-   /* const cartel = new Overlay({
+    /* const cartel = new Overlay({
       element: cartelRef.current,
       positioning: 'bottom-center',
       offset: [0, -44],
       stopEvent: false,
-    })*/
+    }) */
 
     const mapa = new Map({
       target: mapaRef.current,
@@ -72,8 +72,8 @@ export default function Contacto() {
       view: new View({ center: centro, zoom: 16 }),
     })
 
-   // cartel.setPosition(centro)
-    cartelRef.current.hidden = false
+    // cartel.setPosition(centro)
+    // cartelRef.current.hidden = false
 
     return () => mapa.setTarget(undefined)
   }, [])
@@ -125,9 +125,9 @@ export default function Contacto() {
           className="contacto__mapa"
           aria-label="Mapa de la ubicación de la oficina"
         >
-        {/*}  <div ref={cartelRef} className="contacto__cartel" hidden>
+          {/* <div ref={cartelRef} className="contacto__cartel" hidden>
             Catedral de La Plata — nuestra oficina
-          </div>*/}
+          </div> */}
         </div>
 
       </div>
