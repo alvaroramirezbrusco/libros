@@ -1,1 +1,183 @@
 /* Estilos de la vista Contacto */
+
+.contacto-content {
+  width: 90%;
+  max-width: 480px;
+  margin: 2rem auto;
+  padding-bottom: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contacto__datos {
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--color-bg-secondary);
+}
+
+.contacto__datos h2 {
+  margin: 0 0 0.25rem;
+
+  color: var(--color-text-white);
+  font-family: var(--font-family-secondary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.contacto__datos p {
+  margin: 0;
+
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* Título de la sección del mapa (mismo criterio que el resto de las vistas) */
+.contacto__titulo-mapa {
+  margin: 0 0 0.75rem;
+
+  color: var(--color-text-dark);
+  font-size: var(--font-size-lg);
+}
+
+.contacto__lista {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+}
+.contacto__lista a {
+  color: var(--color-options-light);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.contacto__lista a:hover { color: var(--color-text-white); }
+
+.contacto__lista strong {
+  color: var(--color-text-dark);
+}
+
+.contacto__mapa {
+  width: 100%;
+  height: 300px;
+
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: var(--color-surface);
+
+  /* ancla de posicionamiento para los controles de OpenLayers */
+  position: relative;
+  /* que las capas del mapa no se monten sobre el navbar fijo */
+  z-index: 0;
+}
+
+
+.contacto__mapa .ol-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.contacto__mapa .ol-overlaycontainer,
+.contacto__mapa .ol-overlaycontainer-stopevent {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.contacto__mapa .ol-control {
+  position: absolute;
+}
+
+/* Botones de zoom */
+.contacto__mapa .ol-zoom {
+  top: 0.5rem;
+  left: 0.5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contacto__mapa .ol-zoom button {
+  width: 30px;
+  height: 30px;
+
+  border: 0;
+  border-radius: 0.5rem;
+
+  background: var(--color-options);
+  color: var(--color-text-white);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+}
+
+.contacto__mapa .ol-zoom button:hover {
+  background: var(--color-options-light);
+}
+
+/* Control de rotación: no lo usamos (sin ol.css no se auto-oculta) */
+.contacto__mapa .ol-rotate {
+  display: none;
+}
+
+/* Atribución de OpenStreetMap (obligatoria por licencia) */
+.contacto__mapa .ol-attribution {
+  right: 0;
+  bottom: 0;
+  max-width: 100%;
+
+  padding: 2px 6px;
+  border-radius: 6px 0 0 0;
+  background: var(--color-surface-semitransparent);
+
+  font-size: 10px;
+}
+
+.contacto__mapa .ol-attribution ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-text-muted);
+}
+
+.contacto__mapa .ol-attribution li {
+  display: inline;
+}
+
+.contacto__mapa .ol-attribution a {
+  color: var(--color-text-light);
+}
+
+.contacto__mapa .ol-attribution button {
+  display: none;
+}
+
+/* Cartel apoyado sobre el marcador 
+.contacto__cartel {
+  padding: 6px 10px;
+  border-radius: 0.5rem;
+
+  background: var(--color-surface);
+  border: 1px solid var(--color-dots);
+  box-shadow: 0 4px 12px var(--color-dark-semitransparent);
+
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  white-space: nowrap;
+  pointer-events: none;
+}
+*/
