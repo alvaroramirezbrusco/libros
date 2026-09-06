@@ -1,14 +1,16 @@
-/* Estilos de la vista Contacto */
+/* Estilos de la vista Contacto
+   El ancho del contenedor lo maneja .page-content (styles/global.css). */
 
 .contacto-content {
-  width: 90%;
-  max-width: 480px;
-  margin: 2rem auto;
-  padding-bottom: 2rem;
-
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .contacto__mapa {
+    height: 380px;
+  }
 }
 
 .contacto__datos {

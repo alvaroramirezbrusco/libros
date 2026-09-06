@@ -46,7 +46,7 @@ export default function Historial() {
         volver={true}
       />
 
-      <section className="historial-content">
+      <section className="page-content page-content--wide">
 
         {items.length === 0 ? (
           <p className="historial__vacio">

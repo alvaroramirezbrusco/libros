@@ -92,7 +92,7 @@ export default function ListaDeseos() {
         />
       )}
 
-      <section className="lista-deseos-content">
+      <section className="page-content page-content--wide">
 
         {items.length === 0 ? (
           <p className="lista-deseos__vacia">

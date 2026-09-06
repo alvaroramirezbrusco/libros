@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom'
-import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import Home from './pages/Home/Home'
 import Detalle from './pages/Detalle/Detalle'
@@ -12,7 +11,7 @@ import './App.css'
 export default function App() {
   return (
     <div className="app">
-      <Navbar />
+      {/* La navegación vive dentro de <PageHeader /> (una por página) */}
       <main className="app-main">
         <Routes>
           <Route path={PATHS.home} element={<Home />} />

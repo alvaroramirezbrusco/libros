@@ -5,3 +5,20 @@
 
   width: 100%;
 }
+
+/* Tablet / laptop: la grilla suma columnas segun el ancho disponible.
+   Afecta a resultados de busqueda (Home) e Historial; el carrusel de
+   categorias se mantiene en 2 columnas (ver BookSection.css). */
+@media (min-width: 768px) {
+  .book-list {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .book-list {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.25rem;
+  }
+}

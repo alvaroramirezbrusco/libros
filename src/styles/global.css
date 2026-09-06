@@ -1,3 +1,52 @@
 :root {
+  /* Alto de la barra azul superior (PageHeader) */
   --page-header-height: 56px;
+
+  /* ------------------------------------------------------------------
+     Anchos del contenido central de cada página, por breakpoint.
+     Los breakpoints son 768px (tablet) y 1024px (laptop). CSS no permite
+     usar variables dentro de @media, así que esos dos números se repiten
+     en las media queries de abajo: son el ÚNICO lugar donde viven.
+     Para cambiar el ancho de todas las páginas se tocan estos tokens.
+     ------------------------------------------------------------------ */
+
+  /* Perfil "lectura": Detalle, Contacto */
+  --content-width: 480px;
+  --content-width-tablet: 680px;
+  --content-width-laptop: 820px;
+
+  /* Perfil "ancho": páginas con grillas (Home, Historial, Lista de deseos) */
+  --content-width-wide-tablet: 760px;
+  --content-width-wide-laptop: 1040px;
+}
+
+/* ------------------------------------------------------------------
+   Contenedor central de una página (va debajo del PageHeader).
+   Uso:  <div className="page-content">            -> perfil lectura
+         <div className="page-content page-content--wide">  -> perfil ancho
+   ------------------------------------------------------------------ */
+.page-content {
+  width: 90%;
+  max-width: var(--content-width);
+  margin: 2rem auto;
+  padding-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .page-content {
+    width: 92%;
+    max-width: var(--content-width-tablet);
+  }
+  .page-content--wide {
+    max-width: var(--content-width-wide-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-content {
+    max-width: var(--content-width-laptop);
+  }
+  .page-content--wide {
+    max-width: var(--content-width-wide-laptop);
+  }
 }

@@ -36,7 +36,7 @@ export default function Home() {
         volver={false}
       />
 
-      <div className="home-content">
+      <div className="page-content page-content--wide">
 
         <Search onBuscar={handleBuscar} />
 

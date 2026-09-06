@@ -1,13 +1,10 @@
-/*----------------------------------------------------------
-   PageHeader.css — barra superior
-   Colores/tamaños desde src/styles/ (colores.css, tipografia.css)
-   ---------------------------------------------------------- */
+/*   PageHeader.css — barra superior */
 
 .page-header {
   position: relative;
 
   width: 100%;
-  height: var(--page-header-height);
+  height: var(--page-header-height, 56px);
 
   display: flex;
   align-items: center;
@@ -58,4 +55,41 @@
 .page-header__icono {
   width: 20px;
   height: 20px;
+}
+
+/* ---- TABLET en adelante: título + navegación en la misma barra azul ---- */
+@media (min-width: 768px) {
+  .page-header {
+    position: sticky;              /* la barra (con el menú) sigue al scroll */
+    top: 0;
+    z-index: 1000;
+
+    height: auto;
+    min-height: var(--page-header-height, 56px);
+
+    justify-content: flex-start;   /* título a la izquierda, nav a la derecha */
+    flex-wrap: wrap;
+    gap: 8px 1rem;
+
+    padding: 10px 24px;
+  }
+
+  /* la flecha deja de flotar: entra en la fila, antes del título */
+  .page-header__volver {
+    position: static;
+    transform: none;
+  }
+
+  .page-header__titulo {
+    text-align: left;
+  }
+}
+
+/* En laptop la flecha "volver" sobra: el menú ya da la navegación */
+@media (min-width: 1024px) {
+  .page-header {
+    padding: 10px 48px;
+  }
+
+  .page-header__volver { display: none; }
 }

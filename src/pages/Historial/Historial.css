@@ -1,11 +1,5 @@
-/* *Estilos de la vista Historial* */
-
-.historial-content {
-  width: 90%;
-  max-width: 480px;
-  margin: 2rem auto;
-  padding-bottom: 2rem;
-}
+/* *Estilos de la vista Historial*
+   El ancho del contenedor lo maneja .page-content (styles/global.css). */
 
 .historial__vacio {
   margin: 2rem auto;

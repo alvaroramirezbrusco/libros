@@ -65,6 +65,7 @@ export default function Search({ onBuscar }: Props) {
       author: a || undefined,
       subject: categoria || undefined,
     })
+     setAbierto(false)   // ← cerrar el menú tras una búsqueda válid
   }
 
   return (

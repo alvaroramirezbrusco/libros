@@ -1,17 +1,19 @@
-/* *Estilos de la vista Lista de deseos* */
-
-.lista-deseos-content {
-  width: 90%;
-  max-width: 480px;
-
-  margin: 2rem auto;
-  padding-bottom: 2rem;
-}
+/* *Estilos de la vista Lista de deseos*
+   El ancho del contenedor lo maneja .page-content (styles/global.css). */
 
 .lista-deseos__items {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+/* Tablet / laptop: las cartas se acomodan en columnas segun el ancho */
+@media (min-width: 768px) {
+  .lista-deseos__items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    align-items: start;
+  }
 }
 
 .lista-deseos__vacia {

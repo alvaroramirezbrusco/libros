@@ -1,11 +1,26 @@
-/* Vista Detalle */
+/* Vista Detalle
+   No usa la clase .page-content porque el header borroso sangra a todo el
+   ancho en movil (width: 100%). Los anchos maximos salen de los tokens
+   de global.css, asi que cambiarlos ahi tambien afecta a esta pagina. */
 
 .book-detail {
   width: 100%;
-  max-width: 480px;
+  max-width: var(--content-width);
   margin: 0 auto;
   padding-bottom: 2rem;
   text-align: left;
+}
+
+@media (min-width: 768px) {
+  .book-detail {
+    max-width: var(--content-width-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .book-detail {
+    max-width: var(--content-width-laptop);
+  }
 }
 
 .book-detail__header {

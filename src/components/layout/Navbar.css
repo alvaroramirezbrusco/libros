@@ -1,7 +1,9 @@
 /*--------------------------------------
-   Navbar.css — barra inferior FIJA
+   Navbar.css — barra inferior FIJA (mobile-first)
+   Desde 768px se integra como fila DENTRO de .page-header
+   (la barra azul del título). Ver media queries al final y PageHeader.css.
    Colores/tamaños desde src/styles/ (colores.css, tipografia.css)
-   -  ----------------------------- */
+   -------------------------------------- */
 
 .navbar {
   position: fixed;              /* fija respecto de la ventana: siempre visible */
@@ -40,4 +42,44 @@
 .navbar__icono {
   width: 22px;
   height: 22px;
+}
+
+/* ---- TABLET en adelante: la navbar deja de ser fija y se vuelve
+   una fila más dentro de .page-header (barra azul del título) ---- */
+@media (min-width: 768px) {
+  .navbar {
+    position: static;               /* ya no flota: fluye dentro del header */
+    transform: none;
+    width: auto;
+    max-width: none;
+
+    margin-left: auto;              /* empuja los links al extremo derecho */
+
+    gap: 1.5rem;
+    padding: 0;
+
+    background: transparent;        /* deja ver el azul del header */
+    border: none;
+    z-index: auto;
+  }
+
+  .navbar__item {
+    flex-direction: row;            /* icono + texto en línea */
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.75);   /* apagado sobre el azul */
+  }
+
+  .navbar__item--activo {
+    color: var(--color-text-white);
+    border-bottom: 2px solid var(--color-text-white);
+  }
+}
+
+/* ---- LAPTOP: más aire ---- */
+@media (min-width: 1024px) {
+  .navbar {
+    gap: 2rem;
+  }
+  .navbar__item { font-size: var(--font-size-base); }
 }

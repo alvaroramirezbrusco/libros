@@ -19,4 +19,10 @@
   padding-bottom: 64px;   /* lugar para la navbar fija */
 }
 
+@media (min-width: 768px) {
+  /* Sin navbar fija abajo: el menú va dentro del .page-header (sticky) */
+  .app-main {
+    padding-bottom: 0;
+  }
+}
 

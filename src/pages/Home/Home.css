@@ -1,14 +1,5 @@
-/* Estilos de la vista Home */
-
-
-/* Estilos de prueba */
-.home-content {
-  width: 90%;
-  max-width: 480px;
-
-  margin: 0 auto;
-  padding-bottom: 2rem;
-}
+/* Estilos de la vista Home
+   El ancho del contenedor lo maneja .page-content (styles/global.css). */
 
 /* Mensajes de estado de la búsqueda (cargando / error / sin resultados) */
 .home-status {

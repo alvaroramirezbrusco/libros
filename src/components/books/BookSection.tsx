@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Book } from '../../types/book'
 import BookList from './BookList'
+import { useBreakpoint } from '../../hooks/useBreakpoint'
 import './BookSection.css'
 
 interface Props {
@@ -13,23 +14,27 @@ export default function BookSection({
   libros
 }: Props) {
 
+  // Cuántos libros muestra el carrusel por vista (y cuánto avanza cada paso):
+  // 2 en móvil, 4 desde tablet.
+  const librosPorVista = useBreakpoint() === 'mobile' ? 2 : 4
+
   const [indice, setIndice] = useState(0)
   const [botonActivo, setBotonActivo] = useState<'anterior' | 'siguiente' | null>(null)
   const [direccion, setDireccion] = useState<'izquierda' | 'derecha' | null>(null)
 
   const librosVisibles = libros.slice(
     indice,
-    indice + 2
+    indice + librosPorVista
   )
 
   const puedeRetroceder = indice > 0
 
-  const puedeAvanzar = indice + 2 < libros.length
+  const puedeAvanzar = indice + librosPorVista < libros.length
 
   const anterior = () => {
     if (puedeRetroceder) {
       setDireccion('derecha')
-      setIndice(indice - 2)
+      setIndice(indice - librosPorVista)
       setBotonActivo('anterior')
 
       setTimeout(() => {
@@ -41,7 +46,7 @@ export default function BookSection({
   const siguiente = () => {
     if (puedeAvanzar) {
       setDireccion('izquierda')
-      setIndice(indice + 2)
+      setIndice(indice + librosPorVista)
       setBotonActivo('siguiente')
 
       setTimeout(() => {

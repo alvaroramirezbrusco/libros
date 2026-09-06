@@ -82,7 +82,7 @@ export default function Contacto() {
     <section className="page page-contacto">
       <PageHeader titulo="Contacto" volver={true} />
 
-      <div className="contacto-content">
+      <div className="contacto-content page-content">
 
         {/* Datos de desarrollador */}
         <div className="contacto__datos">

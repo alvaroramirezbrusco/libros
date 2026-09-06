@@ -6,10 +6,16 @@
 //
 // La flecha llama a navigate(-1), que es "ir atrás" en el
 // historial del navegador (como el botón ◀ del navegador).
+//
+// En tablet/laptop este header también hospeda al <Navbar />:
+// en móvil la Navbar es position:fixed abajo (no importa dónde
+// esté en el DOM), y desde 768px pasa a fila dentro de esta
+// barra azul (ver Navbar.css).
 // ------------------------------------------------------------
 
 import { useNavigate } from 'react-router-dom'
 import ArrowLeftIcon from '../../assets/icons/arrow-left.svg?react'
+import Navbar from './Navbar'
 import './PageHeader.css'
 import { PATHS } from '../../routes/paths'
 
@@ -56,6 +62,9 @@ export default function PageHeader({ titulo, volver = true, estadoHome }: Props)
         </button>
       )}
       <h1 className="page-header__titulo">{titulo}</h1>
+
+      {/* Móvil: se renderiza abajo (position:fixed). Desde 768px: fila aquí. */}
+      <Navbar />
     </header>
   )
 }
