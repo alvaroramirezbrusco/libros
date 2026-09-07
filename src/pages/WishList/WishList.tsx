@@ -106,7 +106,7 @@ export default function WishList() {
                 <WishCard
                   key={item.id}
                   item={item}
-                  onEliminar={() =>
+                  onDelete={() =>
                     setDeseoAEliminar(item)
                   }
                 />

@@ -1,36 +1,29 @@
-import { useState } from 'react'
-
 import { Link } from 'react-router-dom'
-
+import { PRIORITY } from '../../constants/formWish'
 import type { ItemDeseo } from '../../types/wish'
 
 import './WishCard.css'
 
 interface Props {
   item: ItemDeseo
-  onEliminar: () => void
+  onDelete: () => void
 }
 
 export default function WishCard({
   item,
-  onEliminar,
+  onDelete,
 }: Props) {
 
-  const [expandida, setExpandida] = useState(false)
-
-  // *Determina si el contenido necesita poder expandirse.*
-  const necesitaExpandir =
-    item.etiqueta.length > 60 ||
-    (item.nota?.length ?? 0) > 100
+  const priority = PRIORITY.find(
+    ({ value }) => value === item.prioridad
+  )
 
   return (
-    <article className="deseo-card">
+    <article className="wish-card">
 
-      {/* *Portada + información principal* */}
+      <div className="wish-card__main">
 
-      <div className="deseo-card__principal">
-
-        <div className="deseo-card__cover">
+        <div className="wish-card__cover">
 
           {item.cover ? (
             <img
@@ -38,83 +31,65 @@ export default function WishCard({
               alt={`Portada de ${item.title}`}
             />
           ) : (
-            <div className="deseo-card__no-cover">
+            <div className="wish-card__no-cover">
               Sin portada
             </div>
           )}
 
         </div>
 
-        <div className="deseo-card__info">
+        <div className="wish-card__info">
 
-          <h2 className="deseo-card__title">
+          <h2 className="wish-card__title">
             {item.title}
           </h2>
 
-          <p className="deseo-card__author">
+          <p className="wish-card__author">
             de {item.authors.join(', ')}
           </p>
 
-          <p className="deseo-card__priority">
-            Prioridad: {item.prioridad}
-          </p>
+          <div className="wish-card__badges">
+            {priority && (
+              <span className={`wish-card__badge wish-card__badge--priority priority-${priority.value}`}>
+                {priority.text}
+              </span>
+            )}
+
+            <span className="wish-card__badge wish-card__badge--label">
+              {item.etiqueta}
+            </span>
+          </div>
 
         </div>
 
       </div>
 
-      {/* *Etiqueta y nota* */}
-
-      <div
-        className={`deseo-card__details ${
-          expandida
-            ? 'deseo-card__details--expanded'
-            : ''
-        }`}
-      >
-
-        <p className="deseo-card__text">
-          <strong>Etiqueta:</strong> {item.etiqueta}
-        </p>
-
-        {item.nota && (
-          <p className="deseo-card__text">
+      <div className="wish-card__details">
+        {item.nota ? (
+          <p className="wish-card__note">
             <strong>Nota:</strong> {item.nota}
+          </p>
+        ) : (
+          <p className="wish-card__note">
+            <strong>Nota:</strong> Sin nota
           </p>
         )}
 
       </div>
 
-      {/* *Solo aparece si la etiqueta o la nota son largas.* */}
-
-      {necesitaExpandir && (
-        <button
-          type="button"
-          className="deseo-card__more"
-          onClick={() =>
-            setExpandida((actual) => !actual)
-          }
-          aria-expanded={expandida}
-        >
-          {expandida ? '− Menos' : '+ Más'}
-        </button>
-      )}
-
-      {/* *Acciones: siempre visibles.* */}
-
-      <div className="deseo-card__actions">
+      <div className="wish-card__actions">
 
         <Link
           to={`/libro/${item.id}`}
-          className="deseo-card__button deseo-card__button--details"
+          className="wish-card__button wish-card__button--details"
         >
           Detalles
         </Link>
 
         <button
           type="button"
-          className="deseo-card__button deseo-card__button--delete"
-          onClick={onEliminar}
+          className="wish-card__button wish-card__button--delete"
+          onClick={onDelete}
         >
           Eliminar
         </button>
