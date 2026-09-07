@@ -14,7 +14,7 @@ import PageHeader from '../../components/layout/PageHeader'
 
 import type { ItemDeseo } from '../../types/wish'
 import { agregarListaDeseos, eliminarListaDeseos, estaEnListaDeseos } from '../../services/wishList'
-import WishForm from '../../components/deseos/WishForm'
+import WishForm from '../../components/wishes/WishForm'
 import  {registrarVisita } from '../../services/history'
 
 export default function BookDetail() {

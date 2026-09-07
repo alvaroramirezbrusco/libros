@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 
 import PageHeader from '../../components/layout/PageHeader'
 
-import WishCard from '../../components/deseos/WishCard'
+import WishCard from '../../components/wishes/WishCard'
 
 import Pagination from '../../components/books/Pagination'
 
