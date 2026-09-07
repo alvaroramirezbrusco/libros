@@ -13,13 +13,13 @@
 
 @media (min-width: 768px) {
   .book-detail {
-    max-width: var(--content-width-tablet);
+    max-width: none;
   }
 }
 
 @media (min-width: 1024px) {
   .book-detail {
-    max-width: var(--content-width-laptop);
+    max-width: none;
   }
 }
 
@@ -27,6 +27,10 @@
   position: relative;
   overflow: hidden;
   min-height: 330px;
+  isolation: isolate;
+  background-color: var(--color-bg-secondary);
+  border-radius: 0 0 1.25rem 1.25rem;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
 }
 
 /* Imagen de fondo */
@@ -41,7 +45,7 @@
   filter: blur(18px);
   transform: scale(1.1);
 
-  opacity: 0.55;
+  opacity: 0.45;
 }
 
 /* Fondo oscuro */
@@ -55,9 +59,9 @@
   background:
     linear-gradient(
       to bottom,
-      rgba(0, 0, 0, 0.15) 0%,
-      rgba(0, 0, 0, 0.25) 45%,
-      var(--color-bg) 100%
+      rgba(0, 0, 0, 0.28) 0%,
+      rgba(0, 0, 0, 0.48) 48%,
+      var(--color-bg-secondary) 100%
     );
 }
 
@@ -71,16 +75,17 @@
   display: flex;
   align-items: center;
 
-  gap: 1rem;
+  min-height: 330px;
+  gap: 1.25rem;
 
-  padding: 2rem 1rem 2.5rem;
+  padding: 2rem 1.25rem 2.25rem;
 }
 
 
 /* Portada */
 
 .book-detail__cover-container {
-  width: 42%;
+  width: clamp(126px, 40vw, 170px);
   flex-shrink: 0;
 }
 
@@ -90,7 +95,10 @@
 
   overflow: hidden;
 
-  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0.75rem;
+  background-color: var(--color-surface);
+  box-shadow: 0 14px 24px rgba(0, 0, 0, 0.36);
 }
 
 
@@ -128,13 +136,14 @@
 
 .book-detail__favorite {
   width: 100%;
+  min-height: 38px;
 
   margin-top: 0.5rem;
 
   padding: 0.55rem 0.5rem;
 
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 0.6rem;
 
   cursor: pointer;
 
@@ -142,7 +151,7 @@
   border: 1px solid var(--color-options-light);
 
   color: var(--color-options-light);
-  font-weight: var(--font-weight-light);
+  font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-xs);
   text-transform: uppercase;
 
@@ -154,6 +163,11 @@
 .book-detail__favorite:hover {
   background-color: var(--color-options-light);
   color: var(--color-text-dark);
+}
+
+.book-detail__favorite:focus-visible {
+  outline: 2px solid var(--color-options-light);
+  outline-offset: 3px;
 }
 
 .book-detail__favorite--remove {
@@ -192,17 +206,79 @@
   margin: 0;
 
   color: var(--color-text-white);
-  font-size: var(--font-size-xl);
+  font-size: clamp(1.5rem, 4.5vw, 2.2rem);
   font-weight: var(--font-weight-semibold);
   line-height: 1.1;
 }
 
 .book-detail__author {
-  margin: 0.75rem 0 0;
+  margin: 0.65rem 0 0;
 
   color: var(--color-text-light);
 
   font-size: var(--font-size-semibase);
+  line-height: 1.5;
+}
+
+.book-detail__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.24);
+  color: var(--color-text-white);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.book-detail__rating span:first-child {
+  color: #f5c451;
+}
+
+@media (min-width: 600px) {
+  .book-detail__cover-container {
+    width: clamp(170px, 30vw, 210px);
+  }
+
+  .book-detail__content {
+    gap: 2rem;
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .book-detail__header {
+    min-height: 390px;
+    border-radius: 1.25rem;
+  }
+
+  .book-detail__content {
+    min-height: 390px;
+    padding: 2.5rem;
+  }
+
+  .book-detail__cover-container {
+    width: 200px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .book-detail__header,
+  .book-detail__content {
+    min-height: 420px;
+  }
+
+  .book-detail__content {
+    gap: 2.5rem;
+    padding: 3rem;
+  }
+
+  .book-detail__cover-container {
+    width: 220px;
+  }
 }
 
 /* Información */

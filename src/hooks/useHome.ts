@@ -9,7 +9,7 @@ import type { BusquedaParams } from '../components/search/Search'
 import { useBookSearch } from './useBookSearch'
 import { useHomeCategories } from './useHomeCategories'
 
-import { CATEGORIAS } from '../constants/categorias'
+import { CATEGORIAS } from '../constants/categories'
 
 export function useHome() {
 

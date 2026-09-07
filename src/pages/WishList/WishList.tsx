@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 
 import PageHeader from '../../components/layout/PageHeader'
 
-import DeseoCard from '../../components/deseos/DeseoCard'
+import WishCard from '../../components/deseos/WishCard'
 
 import Pagination from '../../components/books/Pagination'
 
@@ -10,20 +10,20 @@ import ConfirmAlert from '../../components/ui/ConfirmAlert'
 
 import Toast from '../../components/ui/Toast'
 
-import type { ItemDeseo } from '../../types/deseo'
+import type { ItemDeseo } from '../../types/wish'
 
 import {
   leerListaDeseos,
   eliminarListaDeseos,
-} from '../../services/listaDeseos'
+} from '../../services/wishList'
 
 import { usePagination } from '../../hooks/usePagination'
 
-import './ListaDeseos.css'
+import './WishList.css'
 
 const DESEOS_POR_PAGINA = 10
 
-export default function ListaDeseos() {
+export default function WishList() {
 
   // *Lee los deseos guardados al abrir la página.*
   const [items, setItems] = useState<ItemDeseo[]>(
@@ -103,7 +103,7 @@ export default function ListaDeseos() {
             <div className="lista-deseos__items">
 
               {itemsPagina.map((item) => (
-                <DeseoCard
+                <WishCard
                   key={item.id}
                   item={item}
                   onEliminar={() =>

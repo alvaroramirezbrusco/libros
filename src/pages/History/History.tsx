@@ -4,15 +4,15 @@ import PageHeader from '../../components/layout/PageHeader'
 import BookList from '../../components/books/BookList'
 import Pagination from '../../components/books/Pagination'
 
-import { leerHistorial } from '../../services/historial'
+import { leerHistorial } from '../../services/history'
 
 import { usePagination } from '../../hooks/usePagination'
 
-import './Historial.css'
+import './History.css'
 
 const LIBROS_POR_PAGINA = 10
 
-export default function Historial() {
+export default function History() {
   // *Lee el historial una sola vez al crear el estado.*
   // *El service ya devuelve los libros ordenados del más reciente al más antiguo.*
   const [items] = useState(() => leerHistorial())

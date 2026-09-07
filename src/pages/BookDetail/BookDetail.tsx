@@ -3,21 +3,21 @@
 
 import { useLocation, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { useLibro } from '../../hooks/useLibro'
+import { useBook } from '../../hooks/useBook'
 
-import './Detalle.css'
+import './BookDetail.css'
 import Loader from '../../components/ui/Loader'
 import Toast from '../../components/ui/Toast'
 import ConfirmAlert from '../../components/ui/ConfirmAlert'
 
 import PageHeader from '../../components/layout/PageHeader'
 
-import type { ItemDeseo } from '../../types/deseo'
-import { agregarListaDeseos, eliminarListaDeseos, estaEnListaDeseos } from '../../services/listaDeseos'
-import FormularioDeseo from '../../components/deseos/FormularioDeseo'
-import  {registrarVisita } from '../../services/historial'
+import type { ItemDeseo } from '../../types/wish'
+import { agregarListaDeseos, eliminarListaDeseos, estaEnListaDeseos } from '../../services/wishList'
+import WishForm from '../../components/deseos/WishForm'
+import  {registrarVisita } from '../../services/history'
 
-export default function Detalle() {
+export default function BookDetail() {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
 
@@ -27,7 +27,7 @@ export default function Detalle() {
     libro,
     cargando,
     error
-  } = useLibro(id)
+  } = useBook(id)
 
   const [enLista, setEnLista] = useState(false)
   const [formAbierto, setFormAbierto] = useState(false)
@@ -42,7 +42,7 @@ export default function Detalle() {
     }
   }, [libro])
   
-  function handleConfirmar(datos: { prioridad: number; etiqueta: string; nota?: string }) {
+  function handleWishConfirm(data: { prioridad: number; etiqueta: string; nota?: string }) {
     if (!libro) return
 
     const item:ItemDeseo = {
@@ -50,9 +50,9 @@ export default function Detalle() {
       title: libro.title,
       cover: libro.cover,
       authors: libro.authors,
-      prioridad: datos.prioridad,
-      etiqueta: datos.etiqueta,
-      nota: datos.nota,
+      prioridad: data.prioridad,
+      etiqueta: data.etiqueta,
+      nota: data.nota,
     }
     
     agregarListaDeseos(item)
@@ -212,9 +212,9 @@ export default function Detalle() {
 
         {/* Formulario lista de deseos */}
         {formAbierto && (
-          <FormularioDeseo
-            onConfirmar={handleConfirmar}
-            onCancelar={() => setFormAbierto(false)}
+          <WishForm
+            onConfirm={handleWishConfirm}
+            onCancel={() => setFormAbierto(false)}
           />
         )}
 

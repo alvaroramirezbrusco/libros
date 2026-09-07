@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
 import Footer from './components/layout/Footer'
 import Home from './pages/Home/Home'
-import Detalle from './pages/Detalle/Detalle'
-import ListaDeseos from './pages/ListaDeseos/ListaDeseos'
-import Historial from './pages/Historial/Historial'
-import Contacto from './pages/Contacto/Contacto'
+import BookDetail from './pages/BookDetail/BookDetail'
+import WishList from './pages/WishList/WishList'
+import History from './pages/History/History'
+import Contact from './pages/Contact/Contact'
 import { PATHS } from './routes/paths'
 import './App.css'
 
@@ -15,10 +15,10 @@ export default function App() {
       <main className="app-main">
         <Routes>
           <Route path={PATHS.home} element={<Home />} />
-          <Route path={PATHS.detalle} element={<Detalle />} />
-          <Route path={PATHS.listaDeseos} element={<ListaDeseos />} />
-          <Route path={PATHS.historial} element={<Historial />} />
-          <Route path={PATHS.contacto} element={<Contacto />} />
+          <Route path={PATHS.detalle} element={<BookDetail />} />
+          <Route path={PATHS.listaDeseos} element={<WishList />} />
+          <Route path={PATHS.historial} element={<History />} />
+          <Route path={PATHS.contacto} element={<Contact />} />
         </Routes>
       </main>
       <Footer />

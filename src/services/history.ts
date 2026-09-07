@@ -1,5 +1,5 @@
 import type { BookDetail } from '../types/book'
-import type { ItemHistorial } from '../types/historial'
+import type { ItemHistorial } from '../types/history'
 
 const CLAVE = 'historial'
 

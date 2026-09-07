@@ -29,4 +29,10 @@
     --color-warning: #FF9800;
     --color-error: #EF4444;
     --color-danger: #BB3333;
+
+    --color-priority-1: #00df4e;
+    --color-priority-2: #a3cf02;
+    --color-priority-3: #e4a300;
+    --color-priority-4: #e47b03;
+    --color-priority-5: #e92102;
 }

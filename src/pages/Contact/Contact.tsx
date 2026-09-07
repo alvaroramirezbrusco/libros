@@ -14,7 +14,7 @@ import { defaults as controlesPorDefecto } from 'ol/control/defaults'
 import Attribution from 'ol/control/Attribution'
 
 import PageHeader from '../../components/layout/PageHeader'
-import './Contacto.css'
+import './Contact.css'
 
 // No se importa 'ol/ol.css': el mapa se dibuja en un <canvas> y los pocos
 // estilos que necesitan los controles están escritos a mano en Contacto.css.
@@ -33,7 +33,7 @@ const PIN_SVG =
     '</svg>',
   )
 
-export default function Contacto() {
+export default function Contact() {
   const mapaRef = useRef<HTMLDivElement>(null)
   // const cartelRef = useRef<HTMLDivElement>(null)
 

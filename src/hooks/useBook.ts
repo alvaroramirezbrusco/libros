@@ -16,7 +16,7 @@ interface OpenLibraryWork {
   }[]
 }
 
-export function useLibro(id: string | undefined) {
+export function useBook(id: string | undefined) {
   const [libro, setLibro] = useState<BookDetail | null>(null)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState<string | null>(null)

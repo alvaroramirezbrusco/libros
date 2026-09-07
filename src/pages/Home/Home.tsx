@@ -9,7 +9,7 @@ import Pagination from '../../components/books/Pagination'
 import Loader from '../../components/ui/Loader'
 
 import { useHome } from '../../hooks/useHome'
-import { CATEGORIAS } from '../../constants/categorias'
+import { CATEGORIAS } from '../../constants/categories'
 
 import './Home.css'
 

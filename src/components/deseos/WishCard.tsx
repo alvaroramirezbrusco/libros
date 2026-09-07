@@ -2,16 +2,16 @@ import { useState } from 'react'
 
 import { Link } from 'react-router-dom'
 
-import type { ItemDeseo } from '../../types/deseo'
+import type { ItemDeseo } from '../../types/wish'
 
-import './DeseoCard.css'
+import './WishCard.css'
 
 interface Props {
   item: ItemDeseo
   onEliminar: () => void
 }
 
-export default function DeseoCard({
+export default function WishCard({
   item,
   onEliminar,
 }: Props) {
