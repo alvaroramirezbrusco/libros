@@ -4,7 +4,7 @@
 
 import { useState } from 'react'
 
-import type { BookPreview } from '../types/book'
+import type { Book } from '../types/book'
 
 const API_URL = 'https://openlibrary.org/search.json'
 
@@ -23,7 +23,7 @@ interface OpenLibraryResponse {
   docs: OpenLibraryDoc[]
 }
 
-function convertirLibro(doc: OpenLibraryDoc): BookPreview {
+function convertirLibro(doc: OpenLibraryDoc): Book {
   return {
     id: doc.key.replace('/works/', ''),
     title: doc.title,
@@ -38,7 +38,7 @@ function convertirLibro(doc: OpenLibraryDoc): BookPreview {
 
 export function useHomeCategories() {
 
-  const [librosPorCategoria, setLibrosPorCategoria] = useState<Record<string, BookPreview[]>>({})
+  const [librosPorCategoria, setLibrosPorCategoria] = useState<Record<string, Book[]>>({})
 
   const [cargando, setCargando] = useState(true)
 

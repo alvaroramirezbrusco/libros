@@ -1,5 +1,5 @@
 // Información mínima utilizada para listados y tarjetas
-export interface BookPreview {
+export interface Book {
   id: string
   title: string
   authors: string[]

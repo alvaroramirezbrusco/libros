@@ -1,7 +1,4 @@
-/* Vista Detalle
-   No usa la clase .page-content porque el header borroso sangra a todo el
-   ancho en movil (width: 100%). Los anchos maximos salen de los tokens
-   de global.css, asi que cambiarlos ahi tambien afecta a esta pagina. */
+/* Detail page: its header uses the complete available width. */
 
 .book-detail {
   width: 100%;
@@ -238,17 +235,6 @@
   color: #f5c451;
 }
 
-@media (min-width: 600px) {
-  .book-detail__cover-container {
-    width: clamp(170px, 30vw, 210px);
-  }
-
-  .book-detail__content {
-    gap: 2rem;
-    padding-inline: 2rem;
-  }
-}
-
 @media (min-width: 768px) {
   .book-detail__header {
     min-height: 390px;
@@ -257,6 +243,7 @@
 
   .book-detail__content {
     min-height: 390px;
+    gap: 2rem;
     padding: 2.5rem;
   }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import type { BusquedaParams } from '../components/search/Search'
-import type { BookPreview } from '../types/book'
+import type { Book } from '../types/book'
 
 import { usePagination } from './usePagination'
 
@@ -24,7 +24,7 @@ interface OpenLibraryResponse {
   docs: OpenLibraryDoc[]
 }
 
-function convertirLibro(doc: OpenLibraryDoc): BookPreview {
+function convertirLibro(doc: OpenLibraryDoc): Book {
   return {
     id: doc.key.replace('/works/', ''),
     title: doc.title,
@@ -39,7 +39,7 @@ function convertirLibro(doc: OpenLibraryDoc): BookPreview {
 
 export function useBookSearch() {
 
-  const [libros, setLibros] = useState<BookPreview[]>([])
+  const [libros, setLibros] = useState<Book[]>([])
 
   const [totalPaginas, setTotalPaginas] = useState(1)
   const [filtros, setFiltros] = useState<BusquedaParams>({})
