@@ -1,0 +1,72 @@
+.wish-filters {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1rem;
+
+	border-radius: 0.75rem;
+}
+
+.wish-filters__label {
+	margin: 0;
+	color: var(--color-text-dark);
+    text-align: left;
+}
+
+
+.wish-filters__group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.wish-filters__label {
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-regular);
+}
+
+.wish-filters__options {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+	gap: 0.5rem;
+}
+
+.wish-filters__button {
+	padding: 0.5rem 0.75rem;
+    height: 2.8rem;
+	border: 1px solid var(--color-text-muted);
+	border-radius: 0.5rem;
+
+	background-color: transparent;
+	color: var(--color-text-muted);
+	font-size: var(--font-size-xs);
+	font-weight: var(--font-weight-regular);
+	cursor: pointer;
+
+	transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.wish-filters__button:hover {
+    border-color: var(--color-options);
+    color: var(--color-options);
+}
+
+.wish-filters__button:active {
+    transform: scale(0.98);
+}
+
+.wish-filters__button.is-selected {
+	background-color: var(--color-options);
+	color: var(--color-text-white);
+    border-color: var(--color-options);
+}
+
+.wish-filters__button:focus-visible {
+	outline: 2px solid var(--color-options-light);
+	outline-offset: 2px;
+}

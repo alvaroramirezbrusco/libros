@@ -3,14 +3,17 @@ import { useMemo, useState } from 'react'
 import PageHeader from '../../components/layout/PageHeader'
 
 import WishCard from '../../components/wishes/WishCard'
+import WishFilters from '../../components/wishes/WishFilters'
 
 import Pagination from '../../components/books/Pagination'
 
 import ConfirmAlert from '../../components/ui/ConfirmAlert'
+import EmptyState from '../../components/ui/EmptyState'
 
 import Toast from '../../components/ui/Toast'
 
 import type { ItemDeseo } from '../../types/wish'
+import { LABELS } from '../../constants/formWish'
 
 import {
   leerListaDeseos,
@@ -21,119 +24,163 @@ import { usePagination } from '../../hooks/usePagination'
 
 import './WishList.css'
 
-const DESEOS_POR_PAGINA = 10
+const WISHES_PER_PAGE = 10
 
 export default function WishList() {
 
-  // *Lee los deseos guardados al abrir la página.*
   const [items, setItems] = useState<ItemDeseo[]>(
     () => leerListaDeseos()
   )
 
-  // *Guarda el deseo que el usuario quiere eliminar.*
-  const [deseoAEliminar, setDeseoAEliminar] =
+  const [wishToDelete, setWishToDelete] =
     useState<ItemDeseo | null>(null)
 
-  // *Controla el mensaje que aparece después de eliminar.*
-  const [toastVisible, setToastVisible] = useState(false)
+  const [isToastVisible, setIsToastVisible] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
+  const [selectedPriorities, setSelectedPriorities] = useState<number[]>([])
+  const [selectedLabels, setSelectedLabels] = useState<string[]>([])
+
+  const labels = useMemo(() => (
+    Array.from(new Set([
+      ...LABELS,
+      ...items.map((item) => item.etiqueta),
+    ]))
+  ), [items])
+
+  const filteredWishes = useMemo(() => (
+    items.filter((item) => {
+      const matchesPriority = selectedPriorities.length === 0
+        || selectedPriorities.includes(item.prioridad)
+      const matchesLabel = selectedLabels.length === 0
+        || selectedLabels.includes(item.etiqueta)
+
+      return matchesPriority && matchesLabel
+    })
+  ), [items, selectedPriorities, selectedLabels])
 
   const totalPaginas = Math.max(
     1,
-    Math.ceil(items.length / DESEOS_POR_PAGINA)
+    Math.ceil(filteredWishes.length / WISHES_PER_PAGE)
   )
 
   const {
     pagina,
     irAnterior,
     irSiguiente,
+    reiniciar,
   } = usePagination(totalPaginas)
 
-  // *Obtiene solamente los deseos de la página actual.*
-  const itemsPagina = useMemo(() => {
+  const paginatedWishes = useMemo(() => {
     const inicio =
-      (pagina - 1) * DESEOS_POR_PAGINA
+      (pagina - 1) * WISHES_PER_PAGE
 
     const fin =
-      inicio + DESEOS_POR_PAGINA
+      inicio + WISHES_PER_PAGE
 
-    return items.slice(inicio, fin)
-  }, [items, pagina])
+    return filteredWishes.slice(inicio, fin)
+  }, [filteredWishes, pagina])
 
-  // *Elimina el deseo después de confirmar.*
-  function handleEliminar() {
-    if (!deseoAEliminar) return
+  function togglePriority(priority: number) {
+    reiniciar()
+    setSelectedPriorities((selected) => (
+      selected.includes(priority)
+        ? selected.filter((current) => current !== priority)
+        : [...selected, priority]
+    ))
+  }
 
-    eliminarListaDeseos(deseoAEliminar.id)
+  function toggleLabel(label: string) {
+    reiniciar()
+    setSelectedLabels((selected) => (
+      selected.includes(label)
+        ? selected.filter((current) => current !== label)
+        : [...selected, label]
+    ))
+  }
+
+  function handleDelete() {
+    if (!wishToDelete) return
+
+    eliminarListaDeseos(wishToDelete.id)
 
     setItems(leerListaDeseos())
 
-    setDeseoAEliminar(null)
+    setWishToDelete(null)
 
-    // *Muestra un mensaje confirmando la eliminación.*
     setToastMessage('Quitado de tu lista de deseos.')
-    setToastVisible(true)
+    setIsToastVisible(true)
   }
 
   return (
-    <section className="page page-lista-deseos">
+    <section className="page page-wish-list">
 
       <PageHeader
-        titulo="Lista de deseos"
-        volver={true}
+        titulo="BookWeb"
+        volver={false}
       />
 
-      {toastVisible && (
+      {isToastVisible && (
         <Toast
           message={toastMessage}
           onClose={() =>
-            setToastVisible(false)
+            setIsToastVisible(false)
           }
         />
       )}
 
-      <section className="page-content page-content--wide">
+      <main className="page-content page-content--wide">
 
-        {items.length === 0 ? (
-          <p className="lista-deseos__vacia">
-            Tu lista de deseos está vacía.
-          </p>
-        ) : (
-          <>
-            <div className="lista-deseos__items">
+        <nav className="wish-filters-nav">
+          <h2>Lista de deseos</h2>
+          <WishFilters
+            selectedPriorities={selectedPriorities}
+            selectedLabels={selectedLabels}
+            labels={labels}
+            onTogglePriority={togglePriority}
+            onToggleLabel={toggleLabel}
+          />
+        </nav>
 
-              {itemsPagina.map((item) => (
-                <WishCard
-                  key={item.id}
-                  item={item}
-                  onDelete={() =>
-                    setDeseoAEliminar(item)
-                  }
-                />
-              ))}
+        <section>
+          {items.length === 0 ? (
+            <EmptyState message="Tu lista de deseos está vacía." />
+          ) : filteredWishes.length === 0 ? (
+            <EmptyState message="No hay deseos que coincidan con los filtros seleccionados." />
+          ) : (
+            <>
+              <div className="wish-list__items">
 
-            </div>
+                {paginatedWishes.map((item) => (
+                  <WishCard
+                    key={item.id}
+                    item={item}
+                    onDelete={() =>
+                      setWishToDelete(item)
+                    }
+                  />
+                ))}
 
-            <Pagination
-              pagina={pagina}
-              totalPaginas={totalPaginas}
-              onAnterior={irAnterior}
-              onSiguiente={irSiguiente}
-            />
-          </>
-        )}
+              </div>
 
-      </section>
+              <Pagination
+                pagina={pagina}
+                totalPaginas={totalPaginas}
+                onAnterior={irAnterior}
+                onSiguiente={irSiguiente}
+              />
+            </>
+          )}
+        </section>
 
-      {/* *Modal de confirmación de eliminación.* */}
+      </main>
 
-      {deseoAEliminar && (
+      {wishToDelete && (
         <ConfirmAlert
           mensaje="¿Querés quitar este libro de tu lista de deseos?"
           onCancelar={() =>
-            setDeseoAEliminar(null)
+            setWishToDelete(null)
           }
-          onConfirmar={handleEliminar}
+          onConfirmar={handleDelete}
         />
       )}
 

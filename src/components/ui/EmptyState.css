@@ -1,0 +1,21 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2rem auto;
+
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.empty-state__message {
+  margin: 0;
+  color: inherit;
+}
+
+.empty-state__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: inherit;
+}

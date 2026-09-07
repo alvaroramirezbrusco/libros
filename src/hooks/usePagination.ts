@@ -28,10 +28,15 @@ export function usePagination(totalPaginas: number = 1) {
     }
   }
 
+  function reiniciar() {
+    setPagina(1)
+  }
+
   return {
     pagina,
     irAnterior,
     irSiguiente,
-    irPagina
+    irPagina,
+    reiniciar,
   }
 }

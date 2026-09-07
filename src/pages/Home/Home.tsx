@@ -1,35 +1,33 @@
-// *Vista principal de la aplicación.*
-// *Muestra el buscador, las categorías, los resultados y la paginación.*
-
 import PageHeader from '../../components/layout/PageHeader'
 import Search from '../../components/search/Search'
 import BookSection from '../../components/books/BookSection'
 import BookList from '../../components/books/BookList'
 import Pagination from '../../components/books/Pagination'
 import Loader from '../../components/ui/Loader'
+import EmptyState from '../../components/ui/EmptyState'
 
 import { useHome } from '../../hooks/useHome'
-import { CATEGORIAS } from '../../constants/categories'
+import { CATEGORIAS as CATEGORIES } from '../../constants/categories'
 
 import './Home.css'
 
 export default function Home() {
   const {
-    libros,
-    librosPorCategoria,
-    cargando,
-    cargandoCategorias,
+    libros: books,
+    librosPorCategoria: booksByCategory,
+    cargando: loading,
+    cargandoCategorias: loadingCategories,
     error,
-    buscando,
-    pagina,
-    totalPaginas,
-    handleBuscar,
-    irAnterior,
-    irSiguiente,
+    buscando: searching,
+    pagina: currentPage,
+    totalPaginas: totalPages,
+    handleBuscar: handleSearch,
+    irAnterior: goToPreviousPage,
+    irSiguiente: goToNextPage,
   } = useHome()
 
   return (
-    <section className="page page-home">
+    <section className="page home-page">
 
       <PageHeader
         titulo="BookWeb"
@@ -38,23 +36,23 @@ export default function Home() {
 
       <div className="page-content page-content--wide">
 
-        <Search onBuscar={handleBuscar} />
+        <Search onBuscar={handleSearch} />
 
         {/* Página principal con categorías */}
-        {!buscando && (
+        {!searching && (
           <>
-            {cargandoCategorias ? (
+            {loadingCategories ? (
               <Loader />
             ) : (
-              CATEGORIAS.map((categoria) => {
-                const librosCategoria =
-                  librosPorCategoria[categoria.subject] ?? []
+              CATEGORIES.map((category) => {
+                const categoryBooks =
+                  booksByCategory[category.subject] ?? []
 
                 return (
                   <BookSection
-                    key={categoria.subject}
-                    titulo={categoria.titulo}
-                    libros={librosCategoria}
+                    key={category.subject}
+                    titulo={category.titulo}
+                    libros={categoryBooks}
                   />
                 )
               })
@@ -63,20 +61,20 @@ export default function Home() {
         )}
 
         {/* Cargando resultados de búsqueda */}
-        {cargando && <Loader />}
+        {loading && <Loader />}
 
         {/* Error */}
         {error && (
-          <p className="home-status home-status--error">
+          <p className="home-message home-message--error">
             {error}
           </p>
         )}
 
         {/* Resultados de búsqueda */}
-        {buscando &&
-          !cargando &&
+        {searching &&
+          !loading &&
           !error &&
-          libros.length > 0 && (
+          books.length > 0 && (
             <>
               <section className="book-section">
 
@@ -86,17 +84,27 @@ export default function Home() {
                   </h2>
                 </div>
 
-                <BookList libros={libros} />
+                <BookList libros={books} />
 
               </section>
 
               <Pagination
-                pagina={pagina}
-                totalPaginas={totalPaginas}
-                onAnterior={irAnterior}
-                onSiguiente={irSiguiente}
+                pagina={currentPage}
+                totalPaginas={totalPages}
+                onAnterior={goToPreviousPage}
+                onSiguiente={goToNextPage}
               />
             </>
+          )}
+
+        {searching &&
+          !loading &&
+          !error &&
+          books.length === 0 && (
+            <EmptyState
+              message="No se encontraron resultados."
+              icon="search"
+            />
           )}
 
       </div>

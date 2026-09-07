@@ -1,8 +1,0 @@
-/* *Estilos de la vista Historial*
-   El ancho del contenedor lo maneja .page-content (styles/global.css). */
-
-.historial__vacio {
-  margin: 2rem auto;
-  text-align: center;
-  color: var(--color-text-muted);
-}

@@ -1,13 +1,9 @@
-/* Estilos de la vista Home
-   El ancho del contenedor lo maneja .page-content (styles/global.css). */
-
-/* Mensajes de estado de la búsqueda (cargando / error / sin resultados) */
-.home-status {
+.home-message {
   text-align: center;
   padding: 1.5rem 0;
   color: var(--color-text-muted);
 }
 
-.home-status--error {
+.home-message--error {
   color: #c0392b;
 }

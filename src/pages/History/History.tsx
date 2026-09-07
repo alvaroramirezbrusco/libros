@@ -3,69 +3,102 @@ import { useMemo, useState } from 'react'
 import PageHeader from '../../components/layout/PageHeader'
 import BookList from '../../components/books/BookList'
 import Pagination from '../../components/books/Pagination'
+import HistoryHeader from '../../components/history/HistoryHeader'
 
-import { leerHistorial } from '../../services/history'
+import EmptyState from '../../components/ui/EmptyState'
+import ConfirmAlert from '../../components/ui/ConfirmAlert'
+import Toast from '../../components/ui/Toast'
+
+import { clearHistory, leerHistorial } from '../../services/history'
 
 import { usePagination } from '../../hooks/usePagination'
 
 import './History.css'
 
-const LIBROS_POR_PAGINA = 10
+const BOOKS_PER_PAGE = 10
 
 export default function History() {
-  // *Lee el historial una sola vez al crear el estado.*
-  // *El service ya devuelve los libros ordenados del más reciente al más antiguo.*
-  const [items] = useState(() => leerHistorial())
+  const [historyItems, setHistoryItems] = useState(() => leerHistorial())
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false)
+  const [isToastVisible, setIsToastVisible] = useState(false)
 
-  const totalPaginas = Math.max(
+  const totalPages = Math.max(
     1,
-    Math.ceil(items.length / LIBROS_POR_PAGINA)
+    Math.ceil(historyItems.length / BOOKS_PER_PAGE)
   )
 
   const {
-    pagina,
-    irAnterior,
-    irSiguiente,
-  } = usePagination(totalPaginas)
+    pagina: currentPage,
+    irAnterior: goToPreviousPage,
+    irSiguiente: goToNextPage,
+  } = usePagination(totalPages)
 
-  // *Obtiene solamente los libros correspondientes a la página actual.*
-  const librosPagina = useMemo(() => {
-    const inicio = (pagina - 1) * LIBROS_POR_PAGINA
-    const fin = inicio + LIBROS_POR_PAGINA
+  const paginatedBooks = useMemo(() => {
+    const start = (currentPage - 1) * BOOKS_PER_PAGE
+    const end = start + BOOKS_PER_PAGE
 
-    return items
-      .slice(inicio, fin)
+    return historyItems
+      .slice(start, end)
       .map((item) => item.libro)
-  }, [items, pagina])
+  }, [historyItems, currentPage])
+
+  function requestClearHistory() {
+    setIsConfirmVisible(true)
+  }
+
+  function handleClearHistory() {
+    clearHistory()
+    setHistoryItems([])
+    setIsConfirmVisible(false)
+    setIsToastVisible(true)
+  }
 
   return (
-    <section className="page page-historial">
+    <section className="page page-history">
 
       <PageHeader
-        titulo="Historial"
-        volver={true}
+        titulo="BookWeb"
+        volver={false}
       />
+
+      {isToastVisible && (
+        <Toast
+          message="El historial fue vaciado."
+          onClose={() => setIsToastVisible(false)}
+        />
+      )}
 
       <section className="page-content page-content--wide">
 
-        {items.length === 0 ? (
-          <p className="historial__vacio">
-            Todavía no visitaste ningún libro.
-          </p>
+        <HistoryHeader
+          hasHistory={historyItems.length > 0}
+          onClearHistory={requestClearHistory}
+        />
+
+        {historyItems.length === 0 ? (
+          <EmptyState message="Historial vacío" />
         ) : (
           <>
-            <BookList libros={librosPagina} />
+            <BookList libros={paginatedBooks} />
 
             <Pagination
-              pagina={pagina}
-              totalPaginas={totalPaginas}
-              onAnterior={irAnterior}
-              onSiguiente={irSiguiente}
+              pagina={currentPage}
+              totalPaginas={totalPages}
+              onAnterior={goToPreviousPage}
+              onSiguiente={goToNextPage}
             />
           </>
         )}
 
       </section>
+
+      {isConfirmVisible && (
+        <ConfirmAlert
+          mensaje="¿Estás seguro de que querés vaciar el historial?"
+          onCancelar={() => setIsConfirmVisible(false)}
+          onConfirmar={handleClearHistory}
+        />
+      )}
 
     </section>
   )

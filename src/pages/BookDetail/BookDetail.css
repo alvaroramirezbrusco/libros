@@ -1,5 +1,3 @@
-/* Detail page: its header uses the complete available width. */
-
 .book-detail {
   width: 100%;
   max-width: var(--content-width);
@@ -27,7 +25,6 @@
   isolation: isolate;
   background-color: var(--color-bg-secondary);
   border-radius: 0 0 1.25rem 1.25rem;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
 }
 
 /* Imagen de fondo */

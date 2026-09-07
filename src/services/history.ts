@@ -3,6 +3,10 @@ import type { ItemHistorial } from '../types/history'
 
 const CLAVE = 'historial'
 
+export function clearHistory() {
+  localStorage.removeItem(CLAVE)
+}
+
 // *Obtiene todos los libros guardados en el historial.*
 export function leerHistorial(): ItemHistorial[] {
   const guardado = localStorage.getItem(CLAVE)
