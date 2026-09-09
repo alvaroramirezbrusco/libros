@@ -4,6 +4,7 @@
 import { useLocation, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useBook } from '../../hooks/useBook'
+import { useTranslation } from '../../hooks/useTranslation'
 
 import './BookDetail.css'
 import Loader from '../../components/ui/Loader'
@@ -28,6 +29,25 @@ export default function BookDetail() {
     cargando,
     error
   } = useBook(id)
+
+  const traduccionTitulo = useTranslation(libro?.title ?? null)
+  const traduccionDescripcion = useTranslation(libro?.description ?? null)
+
+  const tituloMostrado = traduccionTitulo.texto
+  const descripcionMostrada = traduccionDescripcion.texto
+
+  // *Un mismo botón traduce título y descripción a la vez.*
+  const traducido =
+    traduccionTitulo.traducido || traduccionDescripcion.traducido
+  const traduciendo =
+    traduccionTitulo.cargando || traduccionDescripcion.cargando
+  const errorTraduccion =
+    traduccionTitulo.error ?? traduccionDescripcion.error
+
+  function alternarTraduccion() {
+    traduccionTitulo.alternar()
+    traduccionDescripcion.alternar()
+  }
 
   const [enLista, setEnLista] = useState(false)
   const [formAbierto, setFormAbierto] = useState(false)
@@ -192,7 +212,7 @@ export default function BookDetail() {
             {/* Información principal */}
             <div className="book-detail__title">
 
-              <h2>{libro.title}</h2>
+              <h2>{tituloMostrado ?? libro.title}</h2>
 
               <p className="book-detail__author">
                 de {libro.authors.join(', ') || 'Autor desconocido'}
@@ -221,10 +241,34 @@ export default function BookDetail() {
         {/* Descripción */}
         <section className="book-detail__info">
           <div className="book-detail__block">
-            <strong>Descripción</strong>
-              <p className="book-detail__description">
-                {libro.description ?? 'No disponible'}
+            <div className="book-detail__block-header">
+              <strong>Descripción</strong>
+
+              {(libro.title || libro.description) && (
+                <button
+                  type="button"
+                  className="book-detail__translate"
+                  onClick={alternarTraduccion}
+                  disabled={traduciendo}
+                >
+                  {traduciendo
+                    ? 'Traduciendo…'
+                    : traducido
+                      ? 'Ver original'
+                      : 'Ver en español'}
+                </button>
+              )}
+            </div>
+
+            <p className="book-detail__description">
+              {descripcionMostrada ?? 'No disponible'}
+            </p>
+
+            {errorTraduccion && (
+              <p className="book-detail__translate-error">
+                {errorTraduccion}
               </p>
+            )}
           </div>
         </section>
 

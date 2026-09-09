@@ -319,3 +319,54 @@
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
+
+/* Toggle de traducción de la descripción */
+
+.book-detail__block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.book-detail__translate {
+  flex-shrink: 0;
+
+  padding: 0.3rem 0.7rem;
+
+  border: 1px solid var(--color-options-light);
+  border-radius: 999px;
+
+  background-color: transparent;
+  color: var(--color-options-light);
+
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.book-detail__translate:hover:not(:disabled) {
+  background-color: var(--color-options-light);
+  color: var(--color-text-dark);
+}
+
+.book-detail__translate:focus-visible {
+  outline: 2px solid var(--color-options-light);
+  outline-offset: 2px;
+}
+
+.book-detail__translate:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.book-detail__translate-error {
+  margin: 0.5rem 0 0;
+  color: var(--color-danger);
+  font-size: var(--font-size-xs);
+}
