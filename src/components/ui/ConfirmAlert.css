@@ -61,7 +61,7 @@
 .confirm-alert__cancel {
   background-color: transparent;
   border-color: var(--color-options) !important;
-  color: var(--color-text-dark);
+  color: var(--color-options);
 }
 
 .confirm-alert__cancel:hover {
@@ -69,11 +69,22 @@
   color: var(--color-text-white);
 }
 
+.confirm-alert__cancel:active {
+  transform: scale(0.98);
+}
+
 .confirm-alert__confirm {
-  background-color: var(--color-danger);
-  color: var(--color-text-white);
+  background-color: transparent;
+  border-color: var(--color-danger) !important;
+  color: var(--color-danger);
 }
 
 .confirm-alert__confirm:hover {
+  background-color: var(--color-danger);
+  color: var(--color-text-white);
   filter: brightness(0.9);
+}
+
+.confirm-alert__confirm:active {
+  transform: scale(0.98);
 }

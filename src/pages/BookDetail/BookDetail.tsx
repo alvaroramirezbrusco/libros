@@ -121,7 +121,7 @@ export default function BookDetail() {
   return (
     <section className="page page-detail">
       <PageHeader
-        title="Detalle"
+        title="BookWeb"
         showBack={true}
         homeState={homeState}
       />
