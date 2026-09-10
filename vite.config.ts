@@ -28,5 +28,6 @@ function pwaLogoPlugin(): Plugin {
 }
 
 export default defineConfig({
+  base: '/libros/',
   plugins: [react(), svgr(), pwaLogoPlugin()],
 })

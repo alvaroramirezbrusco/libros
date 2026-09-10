@@ -1,5 +1,10 @@
 const CACHE_NAME = 'bookweb-v1'
-const APP_SHELL = ['/', '/index.html', '/manifest.webmanifest']
+const BASE_PATH = new URL('./', self.registration.scope).pathname
+const APP_SHELL = [
+  BASE_PATH,
+  `${BASE_PATH}index.html`,
+  `${BASE_PATH}manifest.webmanifest`,
+]
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -31,11 +36,11 @@ self.addEventListener('fetch', (event) => {
         .then((response) => {
           const responseCopy = response.clone()
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put('/index.html', responseCopy)
+            cache.put(`${BASE_PATH}index.html`, responseCopy)
           })
           return response
         })
-        .catch(() => caches.match('/index.html'))
+        .catch(() => caches.match(`${BASE_PATH}index.html`))
     )
     return
   }
