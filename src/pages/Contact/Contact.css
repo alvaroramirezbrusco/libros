@@ -1,5 +1,4 @@
-/* Estilos de la vista Contacto
-   El ancho del contenedor lo maneja .page-content (styles/global.css). */
+/* Estilos de la vista Contacto; el ancho del contenedor lo maneja .page-content (styles/global.css). */
 
 .contacto-content {
   display: flex;

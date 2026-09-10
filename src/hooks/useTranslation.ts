@@ -1,16 +1,16 @@
-// *Gestiona la traducción de un texto bajo demanda y el toggle original / español.*
+// Gestiona la traducción de un texto bajo demanda y el toggle original / español.
 
 import { useEffect, useState } from 'react'
 import { traducirTexto } from '../services/translate'
 
 interface EstadoTraduccion {
-  // *Texto que se debe mostrar según el toggle.*
+  // Texto a mostrar según el toggle.
   texto: string | null
-  // *True cuando se está mostrando la versión traducida.*
+  // True cuando se muestra la versión traducida.
   traducido: boolean
   cargando: boolean
   error: string | null
-  // *Alterna entre el texto original y el traducido (traduce la primera vez).*
+  // Alterna original / traducido (traduce la primera vez).
   alternar: () => void
 }
 
@@ -23,7 +23,7 @@ export function useTranslation(
   const [cargando, setCargando] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // *Si cambia el texto original (otro libro), se reinicia todo.*
+  // Si cambia el texto original (otro libro), se reinicia todo.
   useEffect(() => {
     setTraduccion(null)
     setTraducido(false)
@@ -34,13 +34,13 @@ export function useTranslation(
   function alternar() {
     if (!original) return
 
-    // *Si ya está traducido, volvemos al original.*
+    // Si ya está traducido, volvemos al original.
     if (traducido) {
       setTraducido(false)
       return
     }
 
-    // *Si ya lo tradujimos antes en esta vista, solo cambiamos el toggle.*
+    // Si ya lo tradujimos antes en esta vista, solo cambiamos el toggle.
     if (traduccion) {
       setTraducido(true)
       return

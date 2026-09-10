@@ -57,7 +57,7 @@
   height: 20px;
 }
 
-/* ---- TABLET en adelante: título + navegación en la misma barra azul ---- */
+/* Tablet en adelante: título + navegación en la misma barra azul. */
 @media (min-width: 768px) {
   .page-header {
     position: sticky;              /* la barra (con el menú) sigue al scroll */

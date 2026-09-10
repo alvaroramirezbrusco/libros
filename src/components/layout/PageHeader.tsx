@@ -1,17 +1,4 @@
-// ============================================================
-// PageHeader.tsx — Barra superior azul de cada pantalla
-// ------------------------------------------------------------
-// Es el "topbar"  flecha para volver + título.
-// Cada página lo usa así:  <PageHeader titulo="Contacto" />
-//
-// La flecha llama a navigate(-1), que es "ir atrás" en el
-// historial del navegador (como el botón ◀ del navegador).
-//
-// En tablet/laptop este header también hospeda al <Navbar />:
-// en móvil la Navbar es position:fixed abajo (no importa dónde
-// esté en el DOM), y desde 768px pasa a fila dentro de esta
-// barra azul (ver Navbar.css).
-// ------------------------------------------------------------
+// Barra superior azul: flecha "volver" (navigate(-1)) + título; desde 768px hospeda la <Navbar />.
 
 import { useNavigate } from 'react-router-dom'
 import ArrowLeftIcon from '../../assets/icons/arrow-left.svg?react'
@@ -19,11 +6,10 @@ import Navbar from './Navbar'
 import './PageHeader.css'
 import { PATHS } from '../../routes/paths'
 
-// Props que recibe el componente:
 interface Props {
-  titulo: string          // texto que se muestra al lado de la flecha
-  volver?: boolean         // ¿mostrar la flecha? por defecto sí.
-  estadoHome?: {              //   en Home la ocultamos con volver={false}
+  titulo: string          // texto al lado de la flecha
+  volver?: boolean        // ¿mostrar la flecha? por defecto sí
+  estadoHome?: {          // estado del Home para restaurarlo al volver
   pagina: number
   filtros: {
     title?: string
@@ -50,7 +36,7 @@ export default function PageHeader({ titulo, volver = true, estadoHome }: Props)
 
   return (
     <header className="page-header">
-      {/* Solo renderizamos el botón si volver es true */}
+      {/* El botón solo se renderiza si volver es true */}
       {volver && (
         <button
           type="button"
@@ -63,7 +49,7 @@ export default function PageHeader({ titulo, volver = true, estadoHome }: Props)
       )}
       <h1 className="page-header__titulo">{titulo}</h1>
 
-      {/* Móvil: se renderiza abajo (position:fixed). Desde 768px: fila aquí. */}
+      {/* Móvil: fija abajo (position:fixed). Desde 768px: fila aquí. */}
       <Navbar />
     </header>
   )

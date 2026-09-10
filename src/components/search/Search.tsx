@@ -1,16 +1,14 @@
 import { useState } from 'react'
 import './Search.css'
 
-// Lo que Search le entrega a Home cuando se envía el formulario.
-// Los tres campos son opcionales, el usuario puede llenar solo uno.
+// Lo que Search entrega a Home al enviar: los tres campos son opcionales.
 export interface BusquedaParams {
   title?: string
   author?: string
   subject?: string
 }
 
-// El padre (Home) le pasa QUÉ hacer cuando se envía el formulario.
-// Search solo junta lo que escribió el usuario y lo entrega hacia arriba.
+// Home pasa qué hacer al enviar; Search solo junta lo escrito y lo entrega.
 interface Props {
   onBuscar: (params: BusquedaParams) => void
 }
@@ -18,8 +16,7 @@ interface Props {
 export default function Search({ onBuscar }: Props) {
   const [abierto, setAbierto] = useState(false)
 
-  // Un estado por cada campo del formulario ("controlled inputs"):
-  // el valor del input siempre refleja estas variables.
+  // Un estado por campo (controlled inputs): el input siempre refleja estas variables.
   const [titulo, setTitulo] = useState('')
   const [autor, setAutor] = useState('')
   const [categoria, setCategoria] = useState('')
@@ -33,11 +30,9 @@ export default function Search({ onBuscar }: Props) {
     const t = titulo.trim()
     const a = autor.trim()
 
-    // Validaciones del lado del cliente, hechas con Js
-   
+    // Validaciones del lado del cliente.
     const nuevosErrores: string[] = []
 
-    
     if (!t && !a && !categoria) {
       nuevosErrores.push('Completá al menos un campo para buscar.')
     }
@@ -58,14 +53,13 @@ export default function Search({ onBuscar }: Props) {
     // Si hay errores, cortamos acá: no se hace la búsqueda.
     if (nuevosErrores.length > 0) return
 
-    // Mandamos solo los campos que tienen algo escrito.
-    
+    // Mandamos solo los campos con algo escrito (undefined evita strings vacíos en la API).
     onBuscar({
-      title: t || undefined,// undefined evita mandar strings vacíos a la API.
+      title: t || undefined,
       author: a || undefined,
       subject: categoria || undefined,
     })
-     setAbierto(false)   // ← cerrar el menú tras una búsqueda válid
+    setAbierto(false)   // cerrar el menú tras una búsqueda válida
   }
 
   return (

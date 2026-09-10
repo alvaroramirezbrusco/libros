@@ -1,5 +1,4 @@
-// *Gestiona la carga de información completa de un libro.*
-// *Obtiene los datos del Work, su edición y sus autores desde Open Library.*
+// Carga la info completa de un libro (Work, edición y autores) desde Open Library.
 
 import { useEffect, useState } from 'react'
 import type { BookDetail } from '../types/book'

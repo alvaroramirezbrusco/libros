@@ -1,7 +1,6 @@
 import type { ItemDeseo } from '../types/wish'
 
-// Capa de persistencia de la lista de deseos.
-// Es el unico archivo que toca localStorage los componentes solo
+// Capa de persistencia de la lista de deseos: único archivo que toca localStorage.
 
 
 const CLAVE = 'listaDeseos'

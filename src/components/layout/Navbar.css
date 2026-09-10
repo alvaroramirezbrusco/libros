@@ -1,9 +1,4 @@
-/*--------------------------------------
-   Navbar.css — barra inferior FIJA (mobile-first)
-   Desde 768px se integra como fila DENTRO de .page-header
-   (la barra azul del título). Ver media queries al final y PageHeader.css.
-   Colores/tamaños desde src/styles/ (colores.css, tipografia.css)
-   -------------------------------------- */
+/* Barra inferior fija (mobile-first); desde 768px se integra como fila dentro de .page-header. */
 
 .navbar {
   position: fixed;              /* fija respecto de la ventana: siempre visible */
@@ -44,8 +39,7 @@
   height: 22px;
 }
 
-/* ---- TABLET en adelante: la navbar deja de ser fija y se vuelve
-   una fila más dentro de .page-header (barra azul del título) ---- */
+/* Tablet en adelante: la navbar deja de ser fija y pasa a ser una fila dentro de .page-header. */
 @media (min-width: 768px) {
   .navbar {
     position: static;               /* ya no flota: fluye dentro del header */

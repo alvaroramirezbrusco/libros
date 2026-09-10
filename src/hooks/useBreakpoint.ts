@@ -1,6 +1,4 @@
-// *Devuelve el breakpoint activo segun el ancho de la ventana.*
-// *Unico lugar donde viven los cortes 768 / 1024 para la logica JS*
-// *(el CSS los repite en sus @media; ver styles/global.css).*
+// Devuelve el breakpoint activo (cortes 768/1024) según el ancho de ventana; el CSS los repite en sus @media.
 
 import { useEffect, useState } from 'react'
 
@@ -12,7 +10,7 @@ const CONSULTAS: Array<{ bp: Breakpoint; query: string }> = [
 ]
 
 function calcularBreakpoint(): Breakpoint {
-  // *En SSR / tests no hay window: asumimos mobile.*
+  // En SSR / tests no hay window: asumimos mobile.
   if (typeof window === 'undefined') return 'mobile'
 
   const match = CONSULTAS.find(

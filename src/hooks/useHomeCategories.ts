@@ -1,6 +1,4 @@
-// *Gestiona la búsqueda de libros en Open Library.*
-// *Se encarga de realizar las consultas, transformar los resultados*
-// *y controlar el estado de carga, errores, filtros y paginación.*
+// Carga libros por categoría desde Open Library y maneja su estado de carga.
 
 import { useState } from 'react'
 

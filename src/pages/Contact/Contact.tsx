@@ -16,8 +16,7 @@ import Attribution from 'ol/control/Attribution'
 import PageHeader from '../../components/layout/PageHeader'
 import './Contact.css'
 
-// No se importa 'ol/ol.css': el mapa se dibuja en un <canvas> y los pocos
-// estilos que necesitan los controles están escritos a mano en Contacto.css.
+// Sin 'ol/ol.css': el mapa es <canvas> y los estilos de los controles van en Contact.css.
 
 // Coordenadas de la Catedral de La Plata
 const LON = -57.9536

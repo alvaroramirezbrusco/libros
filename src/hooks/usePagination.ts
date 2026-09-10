@@ -1,5 +1,4 @@
-// *Maneja la página actual y la navegación entre páginas.*
-// *Es reutilizable en cualquier vista que necesite paginación.*
+// Maneja la página actual y la navegación; reutilizable en cualquier vista paginada.
 
 import { useState } from 'react'
 

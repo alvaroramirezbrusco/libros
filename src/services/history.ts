@@ -7,7 +7,7 @@ export function clearHistory() {
   localStorage.removeItem(CLAVE)
 }
 
-// *Obtiene todos los libros guardados en el historial.*
+// Obtiene todos los libros guardados en el historial.
 export function leerHistorial(): ItemHistorial[] {
   const guardado = localStorage.getItem(CLAVE)
   if (!guardado) return []
@@ -18,19 +18,19 @@ export function leerHistorial(): ItemHistorial[] {
   }
 }
 
-// *Registra una nueva visita en el historial.*
+// Registra una nueva visita en el historial.
 export function registrarVisita(libro: BookDetail) {
   const actuales = leerHistorial()
-  // *Sacamos el libro de la lista si ya estaba para que no se repita.*
+  // Sacamos el libro de la lista si ya estaba para que no se repita.
   const sinRepetir = actuales.filter(
     (i) => i.libro.id !== libro.id
   )
-  // *Lo agregamos al principio porque es el más reciente.*
+  // Lo agregamos al principio porque es el más reciente.
   const nuevo: ItemHistorial = {
     libro,
     visitados: Date.now()
   }
-  // *Guardamos todos los libros, sin limitar la cantidad.*
+  // Guardamos todos los libros, sin limitar la cantidad.
   const lista = [nuevo, ...sinRepetir]
   localStorage.setItem(
     CLAVE,

@@ -1,6 +1,4 @@
-// *Coordina la lógica específica de la página Home.*
-// *Gestiona la búsqueda, las categorías y la restauración del estado*
-// *de la página cuando el usuario vuelve al Home.*
+// Coordina la lógica del Home: búsqueda, categorías y restauración de estado al volver.
 
 import { useEffect, useState } from 'react'
 

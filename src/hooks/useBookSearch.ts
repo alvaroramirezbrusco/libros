@@ -49,8 +49,6 @@ export function useBookSearch() {
 
   const {
     pagina,
-    irAnterior,
-    irSiguiente,
     irPagina
   } = usePagination(totalPaginas)
 

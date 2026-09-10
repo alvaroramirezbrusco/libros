@@ -1,6 +1,4 @@
-// Lo que guardamos en localStorage por cada libro agregado a la lista de
-// deseos: un "resumen" del libro (no el Book completo) + los datos del
-// formulario (Variante B).
+// Lo que se guarda en localStorage por deseo: resumen del libro + datos del formulario.
 
 export interface ItemDeseo {
   // Resumen del libro

@@ -1,7 +1,6 @@
 import './Pagination.css'
 
-// Controles de paginación. No sabe nada de la API: solo avisa
-// al padre (Home) cuando el usuario quiere ir a otra página.
+// Controles de paginación: solo avisan al padre (Home) el cambio de página, sin tocar la API.
 interface Props {
   pagina: number         // página actual
   totalPaginas: number   // cuántas páginas hay en total

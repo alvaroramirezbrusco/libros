@@ -14,8 +14,7 @@ export default function BookSection({
   libros
 }: Props) {
 
-  // Cuántos libros muestra el carrusel por vista (y cuánto avanza cada paso):
-  // 2 en móvil, 4 desde tablet.
+  // Libros por vista y por paso del carrusel: 2 en móvil, 4 desde tablet.
   const librosPorVista = useBreakpoint() === 'mobile' ? 2 : 4
 
   const [indice, setIndice] = useState(0)

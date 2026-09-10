@@ -1,9 +1,8 @@
-// *Traducción de textos bajo demanda usando la API pública de MyMemory.*
-// *No requiere API key. Guarda en localStorage lo ya traducido para no repetir llamadas.*
+// Traducción bajo demanda con la API pública de MyMemory (sin key); cachea en localStorage.
 
 const PREFIJO_CACHE = 'traduccion:'
 
-// *MyMemory limita cada request a ~500 bytes en el parámetro q.*
+// MyMemory limita cada request a ~500 bytes en el parámetro q.
 const LIMITE_SEGMENTO = 450
 
 interface RespuestaMyMemory {
@@ -13,7 +12,7 @@ interface RespuestaMyMemory {
   responseStatus?: number
 }
 
-// *Hash simple y estable para armar la clave de cache a partir del texto original.*
+// Hash simple y estable para armar la clave de cache a partir del texto original.
 function hashTexto(texto: string): string {
   let hash = 0
   for (let i = 0; i < texto.length; i++) {
@@ -39,12 +38,11 @@ function guardarCache(texto: string, destino: string, traduccion: string) {
   try {
     localStorage.setItem(claveCache(texto, destino), traduccion)
   } catch {
-    // *Si el almacenamiento está lleno o bloqueado, seguimos sin cachear.*
+    // Si el almacenamiento está lleno o bloqueado, seguimos sin cachear.
   }
 }
 
-// *Divide el texto en segmentos que no superen el límite de la API,*
-// *cortando de preferencia al final de una oración.*
+// Divide el texto en segmentos bajo el límite de la API, cortando al final de una oración.
 function dividirEnSegmentos(texto: string): string[] {
   if (texto.length <= LIMITE_SEGMENTO) return [texto]
 
@@ -59,7 +57,7 @@ function dividirEnSegmentos(texto: string): string[] {
     }
 
     if (oracion.length > LIMITE_SEGMENTO) {
-      // *Oración más larga que el límite: la partimos a la fuerza.*
+      // Oración más larga que el límite: la partimos a la fuerza.
       for (let i = 0; i < oracion.length; i += LIMITE_SEGMENTO) {
         segmentos.push(oracion.slice(i, i + LIMITE_SEGMENTO))
       }
@@ -98,8 +96,7 @@ async function traducirSegmento(
   return traducido
 }
 
-// *Traduce un texto completo al idioma destino (por defecto español).*
-// *Devuelve el resultado cacheado si ya se tradujo antes.*
+// Traduce un texto completo al idioma destino (español por defecto); usa cache si ya existe.
 export async function traducirTexto(
   texto: string,
   destino = 'es',

@@ -1,5 +1,4 @@
-// *Vista de detalle de un libro.*
-// *Muestra su información y permite agregarlo o quitarlo de la lista de deseos.*
+// Vista de detalle de un libro: su info y alta/baja en la lista de deseos.
 
 import { useLocation, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -36,7 +35,7 @@ export default function BookDetail() {
   const tituloMostrado = traduccionTitulo.texto
   const descripcionMostrada = traduccionDescripcion.texto
 
-  // *Un mismo botón traduce título y descripción a la vez.*
+  // Un mismo botón traduce título y descripción a la vez.
   const traducido =
     traduccionTitulo.traducido || traduccionDescripcion.traducido
   const traduciendo =
@@ -55,7 +54,7 @@ export default function BookDetail() {
   const [toastMessage, setToastMessage] = useState('')
   const [confirmarEliminar, setConfirmarEliminar] = useState(false)
   
-  // *Registra automáticamente la visita al libro en el historial.*
+  // Registra automáticamente la visita al libro en el historial.
   useEffect(() => {
     if (libro) {
       registrarVisita(libro)

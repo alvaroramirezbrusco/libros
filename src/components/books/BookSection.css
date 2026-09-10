@@ -81,9 +81,7 @@
   width: 100%;
 }
 
-/* El carrusel muestra 2 libros por paso en movil y 4 desde tablet
-   (logica en BookSection.tsx via useBreakpoint).
-   Tablet/laptop: los 4 en una sola fila (anula la grilla fluida de BookList.css). */
+/* Tablet/laptop: los 4 libros del paso en una sola fila (anula la grilla fluida de BookList.css). */
 @media (min-width: 768px) {
   .book-section__carousel-content .book-list {
     grid-template-columns: repeat(4, minmax(0, 1fr));
