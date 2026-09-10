@@ -1,48 +1,48 @@
 import './ConfirmAlert.css'
 
 interface Props {
-  mensaje: string
-  onConfirmar: () => void
-  onCancelar: () => void
+  message: string
+  onConfirm: () => void
+  onCancel: () => void
 }
 
 export default function ConfirmAlert({
-  mensaje,
-  onConfirmar,
-  onCancelar,
+  message,
+  onConfirm,
+  onCancel,
 }: Props) {
   return (
     <div
       className="confirm-alert__overlay"
-      onClick={onCancelar}
+      onClick={onCancel}
     >
       <div
         className="confirm-alert"
         role="alertdialog"
         aria-modal="true"
-        aria-labelledby="confirm-alert-mensaje"
+        aria-labelledby="confirm-alert-message"
         onClick={(e) => e.stopPropagation()}
       >
         <p
-          id="confirm-alert-mensaje"
-          className="confirm-alert__mensaje"
+          id="confirm-alert-message"
+          className="confirm-alert__message"
         >
-          {mensaje}
+          {message}
         </p>
 
-        <div className="confirm-alert__acciones">
+        <div className="confirm-alert__actions">
           <button
             type="button"
-            className="confirm-alert__cancelar"
-            onClick={onCancelar}
+            className="confirm-alert__cancel"
+            onClick={onCancel}
           >
             Cancelar
           </button>
 
           <button
             type="button"
-            className="confirm-alert__confirmar"
-            onClick={onConfirmar}
+            className="confirm-alert__confirm"
+            onClick={onConfirm}
           >
             Eliminar
           </button>

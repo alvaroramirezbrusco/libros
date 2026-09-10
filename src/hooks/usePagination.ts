@@ -1,41 +1,39 @@
-// Maneja la página actual y la navegación; reutilizable en cualquier vista paginada.
-
 import { useState } from 'react'
 
-export function usePagination(totalPaginas: number = 1) {
+export function usePagination(totalPages: number = 1) {
 
-  const [pagina, setPagina] = useState(1)
+  const [page, setPage] = useState(1)
 
-  function irAnterior() {
-    setPagina(actual =>
-      Math.max(1, actual - 1)
+  function goToPreviousPage() {
+    setPage(current =>
+      Math.max(1, current - 1)
     )
   }
 
-  function irSiguiente() {
-    setPagina(actual =>
-      Math.min(totalPaginas, actual + 1)
+  function goToNextPage() {
+    setPage(current =>
+      Math.min(totalPages, current + 1)
     )
   }
 
-  function irPagina(nuevaPagina: number) {
+  function goToPage(newPage: number) {
     if (
-      nuevaPagina >= 1 &&
-      nuevaPagina <= totalPaginas
+      newPage >= 1 &&
+      newPage <= totalPages
     ) {
-      setPagina(nuevaPagina)
+      setPage(newPage)
     }
   }
 
-  function reiniciar() {
-    setPagina(1)
+  function reset() {
+    setPage(1)
   }
 
   return {
-    pagina,
-    irAnterior,
-    irSiguiente,
-    irPagina,
-    reiniciar,
+    page,
+    goToPreviousPage,
+    goToNextPage,
+    goToPage,
+    reset,
   }
 }

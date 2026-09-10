@@ -1,5 +1,4 @@
 :root {
-  /* Alto de la barra azul superior (PageHeader) */
   --page-header-height: 56px;
 
   /* ------------------------------------------------------------------
@@ -10,12 +9,10 @@
      Para cambiar el ancho de todas las páginas se tocan estos tokens.
      ------------------------------------------------------------------ */
 
-  /* Perfil "lectura": Detalle, Contacto */
   --content-width: 480px;
   --content-width-tablet: 680px;
   --content-width-laptop: 820px;
 
-  /* Perfil "ancho": páginas con grillas (Home, Historial, Lista de deseos) */
   --content-width-wide-tablet: 760px;
   --content-width-wide-laptop: 1040px;
 }

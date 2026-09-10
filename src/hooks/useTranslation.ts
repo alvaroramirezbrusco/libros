@@ -1,73 +1,65 @@
-// Gestiona la traducción de un texto bajo demanda y el toggle original / español.
-
 import { useEffect, useState } from 'react'
 import { traducirTexto } from '../services/translate'
 
-interface EstadoTraduccion {
-  // Texto a mostrar según el toggle.
-  texto: string | null
-  // True cuando se muestra la versión traducida.
-  traducido: boolean
-  cargando: boolean
+interface TranslationState {
+  text: string | null
+  translated: boolean
+  loading: boolean
   error: string | null
-  // Alterna original / traducido (traduce la primera vez).
-  alternar: () => void
+  toggle: () => void
 }
 
 export function useTranslation(
   original: string | null,
   destino = 'es'
-): EstadoTraduccion {
-  const [traduccion, setTraduccion] = useState<string | null>(null)
-  const [traducido, setTraducido] = useState(false)
-  const [cargando, setCargando] = useState(false)
+): TranslationState {
+  const [translation, setTranslation] = useState<string | null>(null)
+  const [translated, setTranslated] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Si cambia el texto original (otro libro), se reinicia todo.
   useEffect(() => {
-    setTraduccion(null)
-    setTraducido(false)
-    setCargando(false)
+    setTranslation(null)
+    setTranslated(false)
+    setLoading(false)
     setError(null)
   }, [original])
 
-  function alternar() {
+  function toggle() {
     if (!original) return
 
-    // Si ya está traducido, volvemos al original.
-    if (traducido) {
-      setTraducido(false)
+    if (translated) {
+      setTranslated(false)
       return
     }
 
-    // Si ya lo tradujimos antes en esta vista, solo cambiamos el toggle.
-    if (traduccion) {
-      setTraducido(true)
+    if (translation) {
+      setTranslated(true)
       return
     }
 
-    setCargando(true)
+    setLoading(true)
     setError(null)
 
     traducirTexto(original, destino)
       .then((resultado) => {
-        setTraduccion(resultado)
-        setTraducido(true)
+        setTranslation(resultado)
+        setTranslated(true)
       })
       .catch((e) => {
         console.error('Error traduciendo el texto:', e)
         setError('No se pudo traducir el texto.')
       })
       .finally(() => {
-        setCargando(false)
+        setLoading(false)
       })
   }
 
   return {
-    texto: traducido ? traduccion : original,
-    traducido,
-    cargando,
+    text: translated ? translation : original,
+    translated,
+    loading,
     error,
-    alternar,
+    toggle,
   }
 }

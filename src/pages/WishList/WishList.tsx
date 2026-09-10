@@ -12,12 +12,12 @@ import EmptyState from '../../components/ui/EmptyState'
 
 import Toast from '../../components/ui/Toast'
 
-import type { ItemDeseo } from '../../types/wish'
+import type { WishItem } from '../../types/wish'
 import { LABELS } from '../../constants/formWish'
 
 import {
-  leerListaDeseos,
-  eliminarListaDeseos,
+  readWishList,
+  removeWish,
 } from '../../services/wishList'
 
 import { usePagination } from '../../hooks/usePagination'
@@ -28,12 +28,12 @@ const WISHES_PER_PAGE = 10
 
 export default function WishList() {
 
-  const [items, setItems] = useState<ItemDeseo[]>(
-    () => leerListaDeseos()
+  const [items, setItems] = useState<WishItem[]>(
+    () => readWishList()
   )
 
   const [wishToDelete, setWishToDelete] =
-    useState<ItemDeseo | null>(null)
+    useState<WishItem | null>(null)
 
   const [isToastVisible, setIsToastVisible] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
@@ -43,45 +43,45 @@ export default function WishList() {
   const labels = useMemo(() => (
     Array.from(new Set([
       ...LABELS,
-      ...items.map((item) => item.etiqueta),
+      ...items.map((item) => item.label),
     ]))
   ), [items])
 
   const filteredWishes = useMemo(() => (
     items.filter((item) => {
       const matchesPriority = selectedPriorities.length === 0
-        || selectedPriorities.includes(item.prioridad)
+        || selectedPriorities.includes(item.priority)
       const matchesLabel = selectedLabels.length === 0
-        || selectedLabels.includes(item.etiqueta)
+        || selectedLabels.includes(item.label)
 
       return matchesPriority && matchesLabel
     })
   ), [items, selectedPriorities, selectedLabels])
 
-  const totalPaginas = Math.max(
+  const totalPages = Math.max(
     1,
     Math.ceil(filteredWishes.length / WISHES_PER_PAGE)
   )
 
   const {
-    pagina,
-    irAnterior,
-    irSiguiente,
-    reiniciar,
-  } = usePagination(totalPaginas)
+    page: currentPage,
+    goToPreviousPage,
+    goToNextPage,
+    reset,
+  } = usePagination(totalPages)
 
   const paginatedWishes = useMemo(() => {
-    const inicio =
-      (pagina - 1) * WISHES_PER_PAGE
+    const start =
+      (currentPage - 1) * WISHES_PER_PAGE
 
-    const fin =
-      inicio + WISHES_PER_PAGE
+    const end =
+      start + WISHES_PER_PAGE
 
-    return filteredWishes.slice(inicio, fin)
-  }, [filteredWishes, pagina])
+    return filteredWishes.slice(start, end)
+  }, [filteredWishes, currentPage])
 
   function togglePriority(priority: number) {
-    reiniciar()
+    reset()
     setSelectedPriorities((selected) => (
       selected.includes(priority)
         ? selected.filter((current) => current !== priority)
@@ -90,7 +90,7 @@ export default function WishList() {
   }
 
   function toggleLabel(label: string) {
-    reiniciar()
+    reset()
     setSelectedLabels((selected) => (
       selected.includes(label)
         ? selected.filter((current) => current !== label)
@@ -101,9 +101,9 @@ export default function WishList() {
   function handleDelete() {
     if (!wishToDelete) return
 
-    eliminarListaDeseos(wishToDelete.id)
+    removeWish(wishToDelete.id)
 
-    setItems(leerListaDeseos())
+    setItems(readWishList())
 
     setWishToDelete(null)
 
@@ -115,8 +115,8 @@ export default function WishList() {
     <section className="page page-wish-list">
 
       <PageHeader
-        titulo="BookWeb"
-        volver={false}
+        title="BookWeb"
+        showBack={false}
       />
 
       {isToastVisible && (
@@ -163,10 +163,10 @@ export default function WishList() {
               </div>
 
               <Pagination
-                currentPage={pagina}
-                totalPages={totalPaginas}
-                onPrevious={irAnterior}
-                onNext={irSiguiente}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPrevious={goToPreviousPage}
+                onNext={goToNextPage}
               />
             </>
           )}
@@ -176,11 +176,11 @@ export default function WishList() {
 
       {wishToDelete && (
         <ConfirmAlert
-          mensaje="¿Querés quitar este libro de tu lista de deseos?"
-          onCancelar={() =>
+          message="¿Querés quitar este libro de tu lista de deseos?"
+          onCancel={() =>
             setWishToDelete(null)
           }
-          onConfirmar={handleDelete}
+          onConfirm={handleDelete}
         />
       )}
 

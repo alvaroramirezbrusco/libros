@@ -1,12 +1,10 @@
-// Carga libros por categoría desde Open Library y maneja su estado de carga.
-
 import { useState } from 'react'
 
 import type { Book } from '../types/book'
 
 const API_URL = 'https://openlibrary.org/search.json'
 
-const LIMITE = 10
+const PAGE_SIZE = 12
 
 interface OpenLibraryDoc {
   key: string
@@ -21,7 +19,7 @@ interface OpenLibraryResponse {
   docs: OpenLibraryDoc[]
 }
 
-function convertirLibro(doc: OpenLibraryDoc): Book {
+function mapBook(doc: OpenLibraryDoc): Book {
   return {
     id: doc.key.replace('/works/', ''),
     title: doc.title,
@@ -36,15 +34,15 @@ function convertirLibro(doc: OpenLibraryDoc): Book {
 
 export function useHomeCategories() {
 
-  const [librosPorCategoria, setLibrosPorCategoria] = useState<Record<string, Book[]>>({})
+  const [booksByCategory, setBooksByCategory] = useState<Record<string, Book[]>>({})
 
-  const [cargando, setCargando] = useState(true)
+  const [loading, setLoading] = useState(true)
 
-  async function cargarCategoria(subject: string) {
+  async function loadCategory(subject: string) {
     const query = new URLSearchParams()
 
     query.set('subject', subject)
-    query.set('limit', String(LIMITE))
+    query.set('limit', String(PAGE_SIZE))
 
     query.set(
       'fields',
@@ -52,23 +50,23 @@ export function useHomeCategories() {
     )
 
     try {
-      const respuesta = await fetch(
+      const response = await fetch(
         `${API_URL}?${query.toString()}`
       )
 
-      if (!respuesta.ok) {
-        throw new Error(`HTTP ${respuesta.status}`)
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
       }
 
-      const datos: OpenLibraryResponse =
-        await respuesta.json()
+      const data: OpenLibraryResponse =
+        await response.json()
 
-      const resultado =
-        datos.docs.map(convertirLibro)
+      const result =
+        data.docs.map(mapBook)
 
-      setLibrosPorCategoria(actual => ({
-        ...actual,
-        [subject]: resultado
+      setBooksByCategory(current => ({
+        ...current,
+        [subject]: result
       }))
     } catch (e) {
       console.error(
@@ -78,23 +76,23 @@ export function useHomeCategories() {
     }
   }
 
-  async function cargarCategorias(
-    categorias: { subject: string }[]
+  async function loadCategories(
+    categories: { subject: string }[]
   ) {
-    setCargando(true)
+    setLoading(true)
 
     await Promise.all(
-      categorias.map(categoria =>
-        cargarCategoria(categoria.subject)
+      categories.map(category =>
+        loadCategory(category.subject)
       )
     )
-    setCargando(false)
+    setLoading(false)
   }
 
   return {
-    librosPorCategoria,
-    cargando,
-    cargarCategoria,
-    cargarCategorias
+    booksByCategory,
+    loading,
+    loadCategory,
+    loadCategories
   }
 }

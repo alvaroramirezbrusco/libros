@@ -1,24 +1,19 @@
-/* Estilos de la vista Contacto; el ancho del contenedor lo maneja .page-content (styles/global.css). */
-
-.contacto-content {
+.contact-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 94%;
+  max-width: 960px;
 }
 
-@media (min-width: 768px) {
-  .contacto__mapa {
-    height: 380px;
-  }
-}
-
-.contacto__datos {
-  padding: 0.85rem 1rem;
+.contact__details {
+  width: 100%;
+  padding: 1.25rem 1.5rem;
   border-radius: 0.75rem;
   background: var(--color-bg-secondary);
 }
 
-.contacto__datos h2 {
+.contact__details h2 {
   margin: 0 0 0.25rem;
 
   color: var(--color-text-white);
@@ -27,7 +22,7 @@
   font-weight: var(--font-weight-bold);
 }
 
-.contacto__datos p {
+.contact__details p {
   margin: 0;
 
   color: var(--color-text-muted);
@@ -36,15 +31,18 @@
   letter-spacing: var(--letter-spacing-wide);
 }
 
-/* Título de la sección del mapa (mismo criterio que el resto de las vistas) */
-.contacto__titulo-mapa {
+.contact__map-section {
+  min-width: 0;
+}
+
+.contact__map-title {
   margin: 0 0 0.75rem;
 
   color: var(--color-text-dark);
   font-size: var(--font-size-lg);
 }
 
-.contacto__lista {
+.contact__list {
   list-style: none;
   margin: 1rem 0 0;
   padding: 0;
@@ -56,52 +54,48 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-light);
 }
-.contacto__lista a {
+.contact__list a {
   color: var(--color-options-light);
   text-decoration: none;
   transition: color 0.2s ease;
 }
-.contacto__lista a:hover { color: var(--color-text-white); }
+.contact__list a:hover { color: var(--color-text-white); }
 
-.contacto__lista strong {
+.contact__list strong {
   color: var(--color-text-dark);
 }
 
-.contacto__mapa {
+.contact__map {
   width: 100%;
-  height: 300px;
+  height: clamp(320px, 60vw, 460px);
 
   border-radius: 0.75rem;
   overflow: hidden;
   background: var(--color-surface);
 
-  /* ancla de posicionamiento para los controles de OpenLayers */
   position: relative;
-  /* que las capas del mapa no se monten sobre el navbar fijo */
   z-index: 0;
 }
 
-
-.contacto__mapa .ol-viewport {
+.contact__map .ol-viewport {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.contacto__mapa .ol-overlaycontainer,
-.contacto__mapa .ol-overlaycontainer-stopevent {
+.contact__map .ol-overlaycontainer,
+.contact__map .ol-overlaycontainer-stopevent {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-.contacto__mapa .ol-control {
+.contact__map .ol-control {
   position: absolute;
 }
 
-/* Botones de zoom */
-.contacto__mapa .ol-zoom {
+.contact__map .ol-zoom {
   top: 0.5rem;
   left: 0.5rem;
 
@@ -110,7 +104,7 @@
   gap: 2px;
 }
 
-.contacto__mapa .ol-zoom button {
+.contact__map .ol-zoom button {
   width: 30px;
   height: 30px;
 
@@ -126,17 +120,15 @@
   transition: background-color 0.2s ease;
 }
 
-.contacto__mapa .ol-zoom button:hover {
+.contact__map .ol-zoom button:hover {
   background: var(--color-options-light);
 }
 
-/* Control de rotación: no lo usamos (sin ol.css no se auto-oculta) */
-.contacto__mapa .ol-rotate {
+.contact__map .ol-rotate {
   display: none;
 }
 
-/* Atribución de OpenStreetMap (obligatoria por licencia) */
-.contacto__mapa .ol-attribution {
+.contact__map .ol-attribution {
   right: 0;
   bottom: 0;
   max-width: 100%;
@@ -148,37 +140,42 @@
   font-size: 10px;
 }
 
-.contacto__mapa .ol-attribution ul {
+.contact__map .ol-attribution ul {
   margin: 0;
   padding: 0;
   list-style: none;
   color: var(--color-text-muted);
 }
 
-.contacto__mapa .ol-attribution li {
+.contact__map .ol-attribution li {
   display: inline;
 }
 
-.contacto__mapa .ol-attribution a {
+.contact__map .ol-attribution a {
   color: var(--color-text-light);
 }
 
-.contacto__mapa .ol-attribution button {
+.contact__map .ol-attribution button {
   display: none;
 }
 
-/* Cartel apoyado sobre el marcador
-.contacto__cartel {
-  padding: 6px 10px;
-  border-radius: 0.5rem;
 
-  background: var(--color-surface);
-  border: 1px solid var(--color-dots);
-  box-shadow: 0 4px 12px var(--color-dark-semitransparent);
+@media (min-width: 768px) {
+  .contact-content {
+    gap: 2rem;
+  }
 
-  font-size: var(--font-size-sm);
-  color: var(--color-text-light);
-  white-space: nowrap;
-  pointer-events: none;
+  .contact__map-section {
+    min-width: 0;
+  }
 }
-*/
+
+@media (min-width: 1024px) {
+  .contact-content {
+    gap: 2.5rem;
+  }
+
+  .contact__details {
+    padding: 1.5rem 2rem;
+  }
+}

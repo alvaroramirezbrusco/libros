@@ -1,39 +1,48 @@
 import type { BookDetail } from '../types/book'
-import type { ItemHistorial } from '../types/history'
+import type { HistoryItem } from '../types/history'
 
-const CLAVE = 'historial'
+const STORAGE_KEY = 'historial'
 
 export function clearHistory() {
-  localStorage.removeItem(CLAVE)
+  localStorage.removeItem(STORAGE_KEY)
 }
 
-// Obtiene todos los libros guardados en el historial.
-export function leerHistorial(): ItemHistorial[] {
-  const guardado = localStorage.getItem(CLAVE)
-  if (!guardado) return []
+interface LegacyHistoryItem {
+  libro: BookDetail
+  visitados: number
+}
+
+export function readHistory(): HistoryItem[] {
+  const stored = localStorage.getItem(STORAGE_KEY)
+  if (!stored) return []
+
   try {
-    return JSON.parse(guardado) as ItemHistorial[]
+    const items = JSON.parse(stored) as Array<HistoryItem | LegacyHistoryItem>
+    return items.map((item) => {
+      if ('book' in item) return item
+
+      return {
+        book: item.libro,
+        visitedAt: item.visitados,
+      }
+    })
   } catch {
     return []
   }
 }
 
-// Registra una nueva visita en el historial.
-export function registrarVisita(libro: BookDetail) {
-  const actuales = leerHistorial()
-  // Sacamos el libro de la lista si ya estaba para que no se repita.
-  const sinRepetir = actuales.filter(
-    (i) => i.libro.id !== libro.id
+export function recordVisit(book: BookDetail) {
+  const currentItems = readHistory()
+  const withoutDuplicate = currentItems.filter(
+    (item) => item.book.id !== book.id
   )
-  // Lo agregamos al principio porque es el más reciente.
-  const nuevo: ItemHistorial = {
-    libro,
-    visitados: Date.now()
+  const newItem: HistoryItem = {
+    book,
+    visitedAt: Date.now()
   }
-  // Guardamos todos los libros, sin limitar la cantidad.
-  const lista = [nuevo, ...sinRepetir]
+  const history = [newItem, ...withoutDuplicate]
   localStorage.setItem(
-    CLAVE,
-    JSON.stringify(lista)
+    STORAGE_KEY,
+    JSON.stringify(history)
   )
 }

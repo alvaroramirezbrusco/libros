@@ -1,17 +1,17 @@
 import './Loader.css'
 
 interface Props {
-  texto?: string
+  text?: string
 }
 
-export default function Loader({ texto }: Props) {
+export default function Loader({ text }: Props) {
   return (
     <div className="loader" role="status" aria-label="Cargando">
       <div className="loader__spinner"></div>
 
-      {texto && (
+      {text && (
         <span className="loader__text">
-          {texto}
+          {text}
         </span>
       )}
     </div>

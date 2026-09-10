@@ -1,5 +1,3 @@
-// Vista de detalle de un libro: su info y alta/baja en la lista de deseos.
-
 import { useLocation, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useBook } from '../../hooks/useBook'
@@ -12,76 +10,73 @@ import ConfirmAlert from '../../components/ui/ConfirmAlert'
 
 import PageHeader from '../../components/layout/PageHeader'
 
-import type { ItemDeseo } from '../../types/wish'
-import { agregarListaDeseos, eliminarListaDeseos, estaEnListaDeseos } from '../../services/wishList'
+import type { WishItem } from '../../types/wish'
+import { addWish, removeWish, isInWishList as checkWishList } from '../../services/wishList'
 import WishForm from '../../components/wishes/WishForm'
-import  {registrarVisita } from '../../services/history'
+import { recordVisit } from '../../services/history'
 
 export default function BookDetail() {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
 
-  const estadoHome = location.state?.estadoHome
+  const homeState = location.state?.estadoHome
 
   const {
-    libro,
-    cargando,
+    book,
+    loading,
     error
   } = useBook(id)
 
-  const traduccionTitulo = useTranslation(libro?.title ?? null)
-  const traduccionDescripcion = useTranslation(libro?.description ?? null)
+  const titleTranslation = useTranslation(book?.title ?? null)
+  const descriptionTranslation = useTranslation(book?.description ?? null)
 
-  const tituloMostrado = traduccionTitulo.texto
-  const descripcionMostrada = traduccionDescripcion.texto
+  const displayedTitle = titleTranslation.text
+  const displayedDescription = descriptionTranslation.text
 
-  // Un mismo botón traduce título y descripción a la vez.
-  const traducido =
-    traduccionTitulo.traducido || traduccionDescripcion.traducido
-  const traduciendo =
-    traduccionTitulo.cargando || traduccionDescripcion.cargando
-  const errorTraduccion =
-    traduccionTitulo.error ?? traduccionDescripcion.error
+  const isTranslated =
+    titleTranslation.translated || descriptionTranslation.translated
+  const isTranslating =
+    titleTranslation.loading || descriptionTranslation.loading
+  const translationError =
+    titleTranslation.error ?? descriptionTranslation.error
 
-  function alternarTraduccion() {
-    traduccionTitulo.alternar()
-    traduccionDescripcion.alternar()
+  function toggleTranslation() {
+    titleTranslation.toggle()
+    descriptionTranslation.toggle()
   }
 
-  const [enLista, setEnLista] = useState(false)
-  const [formAbierto, setFormAbierto] = useState(false)
-  const [toastVisible, setToastVisible] = useState(false)
+  const [isInWishList, setIsInWishList] = useState(false)
+  const [isWishFormOpen, setIsWishFormOpen] = useState(false)
+  const [isToastVisible, setIsToastVisible] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
-  const [confirmarEliminar, setConfirmarEliminar] = useState(false)
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false)
   
-  // Registra automáticamente la visita al libro en el historial.
   useEffect(() => {
-    if (libro) {
-      registrarVisita(libro)
+    if (book) {
+      recordVisit(book)
     }
-  }, [libro])
+  }, [book])
   
-  function handleWishConfirm(data: { prioridad: number; etiqueta: string; nota?: string }) {
-    if (!libro) return
+  function handleWishConfirm(data: { priority: number; label: string; note?: string }) {
+    if (!book) return
 
-    const item:ItemDeseo = {
-      id: libro.id,
-      title: libro.title,
-      cover: libro.cover,
-      authors: libro.authors,
-      prioridad: data.prioridad,
-      etiqueta: data.etiqueta,
-      nota: data.nota,
+    const item: WishItem = {
+      id: book.id,
+      title: book.title,
+      cover: book.cover,
+      authors: book.authors,
+      priority: data.priority,
+      label: data.label,
+      note: data.note,
     }
     
-    agregarListaDeseos(item)
+    addWish(item)
 
-    setFormAbierto(false)
-    setEnLista(true)
+    setIsWishFormOpen(false)
+    setIsInWishList(true)
 
-    //Mensaje de confirmación para el usuario
     setToastMessage('Agregado a tu lista de deseos.')
-    setToastVisible(true)
+    setIsToastVisible(true)
   }
 
   useEffect(() => {
@@ -90,17 +85,17 @@ export default function BookDetail() {
 
   useEffect(() => {
     if (id) {
-      setEnLista(estaEnListaDeseos(id))
+      setIsInWishList(checkWishList(id))
     }
   }, [id])
 
-  if (cargando) {
+  if (loading) {
     return (
-      <section className="page page-detalle">
+      <section className="page page-detail">
         <PageHeader
-          titulo="Detalle"
-          volver={true}
-          estadoHome={estadoHome}
+          title="Detalle"
+          showBack={true}
+          homeState={homeState}
         />
 
         <Loader />
@@ -108,13 +103,13 @@ export default function BookDetail() {
     )
   }
 
-  if (error || !libro) {
+  if (error || !book) {
     return (
-      <section className="page page-detalle">
+      <section className="page page-detail">
         <PageHeader
-          titulo="Detalle"
-          volver={true}
-          estadoHome={estadoHome}
+          title="Detalle"
+          showBack={true}
+          homeState={homeState}
         />
         <p className="book-detail__status">
           {error ?? 'No se encontró el libro.'}
@@ -124,47 +119,45 @@ export default function BookDetail() {
   }
 
   return (
-    <section className="page page-detalle">
+    <section className="page page-detail">
       <PageHeader
-        titulo="Detalle"
-        volver={true}
-        estadoHome={estadoHome}
+        title="Detalle"
+        showBack={true}
+        homeState={homeState}
       />
 
-      {toastVisible && (
+      {isToastVisible && (
         <Toast
           message={toastMessage}
-          onClose={() => setToastVisible(false)}
+          onClose={() => setIsToastVisible(false)}
         />
       )}
 
-      {confirmarEliminar && (
+      {isDeleteConfirmationOpen && (
         <ConfirmAlert
-          mensaje="¿Querés quitar este libro de tu lista de deseos?"
-          onCancelar={() => setConfirmarEliminar(false)}
-          onConfirmar={() => {
-            eliminarListaDeseos(libro.id)
+          message="¿Querés quitar este libro de tu lista de deseos?"
+          onCancel={() => setIsDeleteConfirmationOpen(false)}
+          onConfirm={() => {
+            removeWish(book.id)
 
-            setEnLista(false)
-            setConfirmarEliminar(false)
+            setIsInWishList(false)
+            setIsDeleteConfirmationOpen(false)
 
             setToastMessage('Quitado de tu lista de deseos.')
-            setToastVisible(true)
+            setIsToastVisible(true)
           }}
         />
       )}
 
       <article className="book-detail">
 
-        {/* Header del libro */}
         <header className="book-detail__header">
 
-          {/* Imagen utilizada como fondo */}
-          {libro.cover && (
+          {book.cover && (
             <div
               className="book-detail__background"
               style={{
-                backgroundImage: `url(${libro.cover})`,
+                backgroundImage: `url(${book.cover})`,
               }}
               aria-hidden="true"
             />
@@ -172,13 +165,12 @@ export default function BookDetail() {
 
           <div className="book-detail__content">
 
-            {/* Portada */}
             <div className="book-detail__cover-container">
               <div className="book-detail__cover">
-                {libro.cover ? (
+                {book.cover ? (
                   <img
-                    src={libro.cover}
-                    alt={`Portada de ${libro.title}`}
+                    src={book.cover}
+                    alt={`Portada de ${book.title}`}
                   />
                 ) : (
                   <div className="book-detail__no-cover">
@@ -187,41 +179,38 @@ export default function BookDetail() {
                 )}
               </div>
 
-              {/* Lista de deseos */}
               <button
                 type="button"
                 className={`book-detail__favorite ${
-                  enLista ? 'book-detail__favorite--remove' : ''
+                  isInWishList ? 'book-detail__favorite--remove' : ''
                 }`}
-                aria-label={enLista ? "Quitar de la lista de deseos" : "Agregar a la lista de deseos"}
+                aria-label={isInWishList ? "Quitar de la lista de deseos" : "Agregar a la lista de deseos"}
                 onClick={() => {
-                  if (enLista) {
-                    setConfirmarEliminar(true)
+                  if (isInWishList) {
+                    setIsDeleteConfirmationOpen(true)
                   } else {
-                    setFormAbierto(true)
+                    setIsWishFormOpen(true)
                   }
                 }}
               >
-                {enLista
+                {isInWishList
                   ? 'Quitar de la lista de deseos'
                   : 'Agregar a la lista de deseos'}
               </button>
             </div>
 
-            {/* Información principal */}
             <div className="book-detail__title">
 
-              <h2>{tituloMostrado ?? libro.title}</h2>
+              <h2>{displayedTitle ?? book.title}</h2>
 
               <p className="book-detail__author">
-                de {libro.authors.join(', ') || 'Autor desconocido'}
+                de {book.authors.join(', ') || 'Autor desconocido'}
               </p>
 
-              {/* Calificación */}
-              {libro.rating !== null && (
+              {book.rating !== null && (
                 <div className="book-detail__rating">
                   <span aria-hidden="true">★</span>
-                  <span>{libro.rating.toFixed(1)}</span>
+                  <span>{book.rating.toFixed(1)}</span>
                 </div>
               )}
 
@@ -229,30 +218,28 @@ export default function BookDetail() {
           </div>
         </header>
 
-        {/* Formulario lista de deseos */}
-        {formAbierto && (
+        {isWishFormOpen && (
           <WishForm
             onConfirm={handleWishConfirm}
-            onCancel={() => setFormAbierto(false)}
+            onCancel={() => setIsWishFormOpen(false)}
           />
         )}
 
-        {/* Descripción */}
         <section className="book-detail__info">
           <div className="book-detail__block">
             <div className="book-detail__block-header">
               <strong>Descripción</strong>
 
-              {(libro.title || libro.description) && (
+              {(book.title || book.description) && (
                 <button
                   type="button"
                   className="book-detail__translate"
-                  onClick={alternarTraduccion}
-                  disabled={traduciendo}
+                  onClick={toggleTranslation}
+                  disabled={isTranslating}
                 >
-                  {traduciendo
+                  {isTranslating
                     ? 'Traduciendo…'
-                    : traducido
+                    : isTranslated
                       ? 'Ver original'
                       : 'Ver en español'}
                 </button>
@@ -260,71 +247,70 @@ export default function BookDetail() {
             </div>
 
             <p className="book-detail__description">
-              {descripcionMostrada ?? 'No disponible'}
+              {displayedDescription ?? 'No disponible'}
             </p>
 
-            {errorTraduccion && (
+            {translationError && (
               <p className="book-detail__translate-error">
-                {errorTraduccion}
+                {translationError}
               </p>
             )}
           </div>
         </section>
 
-        {/* Información del libro */}
         {(
-          libro.year !== null ||
-          libro.publisher !== null ||
-          libro.pages !== null ||
-          libro.language.length > 0 ||
-          libro.categories.length > 0
+          book.year !== null ||
+          book.publisher !== null ||
+          book.pages !== null ||
+          book.language.length > 0 ||
+          book.categories.length > 0
         ) && (
           <section className="book-detail__info">
             <div className="book-detail__block">
 
               <strong>Información</strong>
 
-              {libro.year !== null && (
+              {book.year !== null && (
                 <p>
                   Año:{' '}
                   <span className="book-detail__block-span">
-                    {libro.year}
+                    {book.year}
                   </span>
                 </p>
               )}
 
-              {libro.publisher !== null && (
+              {book.publisher !== null && (
                 <p>
                   Editorial:{' '}
                   <span className="book-detail__block-span">
-                    {libro.publisher}
+                    {book.publisher}
                   </span>
                 </p>
               )}
 
-              {libro.pages !== null && (
+              {book.pages !== null && (
                 <p>
                   Páginas:{' '}
                   <span className="book-detail__block-span">
-                    {libro.pages}
+                    {book.pages}
                   </span>
                 </p>
               )}
 
-              {libro.language.length > 0 && (
+              {book.language.length > 0 && (
                 <p>
                   Idiomas:{' '}
                   <span className="book-detail__block-span">
-                    {libro.language.join(', ')}
+                    {book.language.join(', ')}
                   </span>
                 </p>
               )}
 
-              {libro.categories.length > 0 && (
+              {book.categories.length > 0 && (
                 <p>
                   Categorías:{' '}
                   <span className="book-detail__block-span">
-                    {libro.categories.join(', ')}
+                    {book.categories.join(', ')}
                   </span>
                 </p>
               )}

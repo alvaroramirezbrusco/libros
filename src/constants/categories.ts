@@ -1,4 +1,4 @@
-export const CATEGORIAS = [
+export const CATEGORIES = [
   { titulo: 'Fantasía', subject: 'fantasy' },
   { titulo: 'Ciencia ficción', subject: 'science_fiction' },
   { titulo: 'Romance', subject: 'romance' },

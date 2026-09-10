@@ -1,5 +1,3 @@
-// Carga la info completa de un libro (Work, edición y autores) desde Open Library.
-
 import { useEffect, useState } from 'react'
 import type { BookDetail } from '../types/book'
 
@@ -16,23 +14,23 @@ interface OpenLibraryWork {
 }
 
 export function useBook(id: string | undefined) {
-  const [libro, setLibro] = useState<BookDetail | null>(null)
-  const [cargando, setCargando] = useState(true)
+  const [book, setBook] = useState<BookDetail | null>(null)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    async function cargarLibro() {
+    async function loadBook() {
       if (!id) {
         setError('No se encontró el ID del libro.')
-        setCargando(false)
+        setLoading(false)
         return
       }
 
       try {
-        setCargando(true)
+        setLoading(true)
         setError(null)
 
-        const [respuestaWork, respuestaEdiciones] = await Promise.all([
+        const [workResponse, editionsResponse] = await Promise.all([
           fetch(`https://openlibrary.org/works/${id}.json`),
 
           fetch(
@@ -40,117 +38,114 @@ export function useBook(id: string | undefined) {
           ),
         ])
 
-        if (!respuestaWork.ok) {
+        if (!workResponse.ok) {
           throw new Error(
-            `Error obteniendo el Work: HTTP ${respuestaWork.status}`
+            `Error obteniendo el Work: HTTP ${workResponse.status}`
           )
         }
 
-        if (!respuestaEdiciones.ok) {
+        if (!editionsResponse.ok) {
           throw new Error(
-            `Error obteniendo las ediciones: HTTP ${respuestaEdiciones.status}`
+            `Error obteniendo las ediciones: HTTP ${editionsResponse.status}`
           )
         }
 
-        const datosWork: OpenLibraryWork =
-          await respuestaWork.json()
+        const workData: OpenLibraryWork =
+          await workResponse.json()
 
-        const datosEdiciones =
-          await respuestaEdiciones.json()
+        const editionsData =
+          await editionsResponse.json()
 
-        const edicion = datosEdiciones.entries?.[0]
+        const edition = editionsData.entries?.[0]
 
-        // Descripción
-        const descripcion =
-          typeof datosWork.description === 'string'
-            ? datosWork.description
-            : datosWork.description?.value ?? null
+        const description =
+          typeof workData.description === 'string'
+            ? workData.description
+            : workData.description?.value ?? null
 
-        // Autores
-        const autores = datosWork.authors ?? []
-        const nombresAutores: string[] = []
+        const authors = workData.authors ?? []
+        const authorNames: string[] = []
 
-        for (const autor of autores) {
-          if (!autor.author?.key) continue
+        for (const author of authors) {
+          if (!author.author?.key) continue
 
-          const respuestaAutor = await fetch(
-            `https://openlibrary.org${autor.author.key}.json`
+          const authorResponse = await fetch(
+            `https://openlibrary.org${author.author.key}.json`
           )
 
-          if (respuestaAutor.ok) {
-            const datosAutor = await respuestaAutor.json()
+          if (authorResponse.ok) {
+            const authorData = await authorResponse.json()
 
-            if (datosAutor.name) {
-              nombresAutores.push(datosAutor.name)
+            if (authorData.name) {
+              authorNames.push(authorData.name)
             }
           }
         }
 
-        // Categorías
-        const categorias = [
+        const categories = [
           ...new Set(
-            (datosWork.subjects ?? [])
-              .flatMap((categoria) => categoria.split(','))
-              .map((categoria) => categoria.trim())
+            (workData.subjects ?? [])
+              .flatMap((category) => category.split(','))
+              .map((category) => category.trim())
               .filter(Boolean)
           )
         ]
 
-        const categoriasFiltradas = categorias.filter(
-          (categoria) =>
-            categoria.toLowerCase() !== 'fiction'
+        const filteredCategories = categories.filter(
+          (category) =>
+            category.toLowerCase() !== 'fiction'
         )
 
-        const libroDetalle: BookDetail = {
+        const bookDetails: BookDetail = {
           id,
-          title: datosWork.title ?? '',
-          authors: nombresAutores,
+          title: workData.title ?? '',
+          authors: authorNames,
 
-          cover: datosWork.covers?.[0]
-            ? `https://covers.openlibrary.org/b/id/${datosWork.covers[0]}-L.jpg`
+          cover: workData.covers?.[0]
+            ? `https://covers.openlibrary.org/b/id/${workData.covers[0]}-L.jpg`
             : null,
 
           rating: null,
           ratingCount: null,
 
-          description: descripcion,
+          description,
 
-          year: edicion?.publish_date
+          year: edition?.publish_date
             ? Number(
-                edicion.publish_date.match(/\d{4}/)?.[0]
+                edition.publish_date.match(/\d{4}/)?.[0]
               ) || null
             : null,
 
-          publisher: edicion?.publishers?.[0] ?? null,
+          publisher: edition?.publishers?.[0] ?? null,
 
-          publishers: edicion?.publishers ?? [],
+          publishers: edition?.publishers ?? [],
 
-          categories: categoriasFiltradas.slice(0, 10),
+          categories: filteredCategories.slice(0, 10),
 
-          pages: edicion?.number_of_pages ?? null,
+          pages: edition?.number_of_pages ?? null,
 
           language:
-            edicion?.languages?.map(
-              (idioma: { key: string }) =>
-                idioma.key.split('/').pop() ?? ''
+            edition?.languages?.map(
+              (language: { key: string }) =>
+                language.key.split('/').pop() ?? ''
             ) ?? [],
         }
 
-        setLibro(libroDetalle)
+        setBook(bookDetails)
       } catch (error) {
         console.error('Error obteniendo el libro:', error)
         setError('No se pudo cargar el libro.')
       } finally {
-        setCargando(false)
+        setLoading(false)
       }
     }
 
-    cargarLibro()
+    loadBook()
   }, [id])
 
   return {
-    libro,
-    cargando,
+    book,
+    loading,
     error
   }
 }

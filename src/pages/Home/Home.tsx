@@ -7,38 +7,37 @@ import Loader from '../../components/ui/Loader'
 import EmptyState from '../../components/ui/EmptyState'
 
 import { useHome } from '../../hooks/useHome'
-import { CATEGORIAS as CATEGORIES } from '../../constants/categories'
+import { CATEGORIES } from '../../constants/categories'
 
 import './Home.css'
 
 export default function Home() {
   const {
-    libros: books,
-    librosPorCategoria: booksByCategory,
-    cargando: loading,
-    cargandoCategorias: loadingCategories,
+    books,
+    booksByCategory,
+    loading,
+    loadingCategories,
     error,
-    buscando: searching,
-    pagina: currentPage,
-    totalPaginas: totalPages,
-    handleBuscar: handleSearch,
-    irAnterior: goToPreviousPage,
-    irSiguiente: goToNextPage,
+    searching,
+    page: currentPage,
+    totalPages,
+    handleSearch,
+    goToPreviousPage,
+    goToNextPage,
   } = useHome()
 
   return (
     <section className="page home-page">
 
       <PageHeader
-        titulo="BookWeb"
-        volver={false}
+        title="BookWeb"
+        showBack={false}
       />
 
       <div className="page-content page-content--wide">
 
         <Search onSearch={handleSearch} />
 
-        {/* Página principal con categorías */}
         {!searching && (
           <>
             {loadingCategories ? (
@@ -60,17 +59,14 @@ export default function Home() {
           </>
         )}
 
-        {/* Cargando resultados de búsqueda */}
         {loading && <Loader />}
 
-        {/* Error */}
         {error && (
           <p className="home-message home-message--error">
             {error}
           </p>
         )}
 
-        {/* Resultados de búsqueda */}
         {searching &&
           !loading &&
           !error &&

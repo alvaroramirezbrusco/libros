@@ -11,7 +11,6 @@ import './App.css'
 export default function App() {
   return (
     <div className="app">
-      {/* La navegación vive dentro de <PageHeader /> (una por página) */}
       <main className="app-main">
         <Routes>
           <Route path={PATHS.home} element={<Home />} />

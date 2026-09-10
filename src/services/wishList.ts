@@ -1,38 +1,54 @@
-import type { ItemDeseo } from '../types/wish'
+import type { WishItem } from '../types/wish'
 
-// Capa de persistencia de la lista de deseos: único archivo que toca localStorage.
+const STORAGE_KEY = 'listaDeseos'
 
+interface LegacyWishItem {
+  id: string
+  title: string
+  cover: string | null
+  authors: string[]
+  prioridad: number
+  etiqueta: string
+  nota?: string
+}
 
-const CLAVE = 'listaDeseos'
-
-
-// Devuelve la lista guardada (o [] si no hay nada / el JSON está roto).
-export function leerListaDeseos(): ItemDeseo[] {
-  const guardado = localStorage.getItem(CLAVE)
-  if (!guardado) return []
+export function readWishList(): WishItem[] {
+  const stored = localStorage.getItem(STORAGE_KEY)
+  if (!stored) return []
 
   try {
-    return JSON.parse(guardado) as ItemDeseo[]
+    const items = JSON.parse(stored) as Array<WishItem | LegacyWishItem>
+    return items.map((item) => {
+      if ('priority' in item) return item
+
+      return {
+        id: item.id,
+        title: item.title,
+        cover: item.cover,
+        authors: item.authors,
+        priority: item.prioridad,
+        label: item.etiqueta,
+        note: item.nota,
+      }
+    })
   } catch {
-    return [] // si el JSON está defectuoso, arrancamos de cero
+    return []
   }
 }
 
-// Agrega un ítem al final de la lista y guarda todo de nuevo.
-export function agregarListaDeseos(item: ItemDeseo) {
-  const actuales = leerListaDeseos()
-  const sinDuplicar = actuales.filter((i) => i.id !== item.id)
-  sinDuplicar.push(item)
-  localStorage.setItem(CLAVE, JSON.stringify(sinDuplicar))
-  
+export function addWish(item: WishItem) {
+  const currentItems = readWishList()
+  const withoutDuplicate = currentItems.filter((current) => current.id !== item.id)
+  withoutDuplicate.push(item)
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(withoutDuplicate))
 }
-// Devuelve true si el id está en la lista de deseos, false si no.
-export function estaEnListaDeseos(id: string): boolean {
-  return leerListaDeseos().some((i) => i.id === id)
+
+export function isInWishList(id: string): boolean {
+  return readWishList().some((item) => item.id === id)
 }
-// Saca de la lista el ítem con ese id y guarda el resto.
-export function eliminarListaDeseos(id: string) {
-  const actuales = leerListaDeseos()
-  const filtrados = actuales.filter((i) => i.id !== id)
-  localStorage.setItem(CLAVE, JSON.stringify(filtrados))
+
+export function removeWish(id: string) {
+  const currentItems = readWishList()
+  const remainingItems = currentItems.filter((item) => item.id !== id)
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(remainingItems))
 }

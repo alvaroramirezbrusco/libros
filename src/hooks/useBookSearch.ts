@@ -1,14 +1,14 @@
 import { useState } from 'react'
 
-import type { BusquedaParams } from '../components/search/Search'
+import type { SearchParams } from '../components/search/Search'
 import type { Book } from '../types/book'
 
 import { usePagination } from './usePagination'
 
 const API_URL = 'https://openlibrary.org/search.json'
 
-const LIMITE = 10
-const MAX_PAGINAS = 10
+const PAGE_SIZE = 10
+const MAX_PAGES = 10
 
 interface OpenLibraryDoc {
   key: string
@@ -24,7 +24,7 @@ interface OpenLibraryResponse {
   docs: OpenLibraryDoc[]
 }
 
-function convertirLibro(doc: OpenLibraryDoc): Book {
+function mapBook(doc: OpenLibraryDoc): Book {
   return {
     id: doc.key.replace('/works/', ''),
     title: doc.title,
@@ -39,21 +39,21 @@ function convertirLibro(doc: OpenLibraryDoc): Book {
 
 export function useBookSearch() {
 
-  const [libros, setLibros] = useState<Book[]>([])
+  const [books, setBooks] = useState<Book[]>([])
 
-  const [totalPaginas, setTotalPaginas] = useState(1)
-  const [filtros, setFiltros] = useState<BusquedaParams>({})
+  const [totalPages, setTotalPages] = useState(1)
+  const [filters, setFilters] = useState<SearchParams>({})
 
-  const [cargando, setCargando] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const {
-    pagina,
-    irPagina
-  } = usePagination(totalPaginas)
+    page,
+    goToPage
+  } = usePagination(totalPages)
 
-  async function buscarLibros(
-    params: BusquedaParams,
+  async function searchBooks(
+    params: SearchParams,
     page = 1
   ) {
 
@@ -72,27 +72,27 @@ export function useBookSearch() {
     }
 
     query.set('page', String(page))
-    query.set('limit', String(LIMITE))
+    query.set('limit', String(PAGE_SIZE))
 
     query.set(
       'fields',
       'key,title,author_name,cover_i,ratings_average,ratings_count'
     )
 
-    setCargando(true)
+    setLoading(true)
     setError(null)
 
     try {
-      const respuesta = await fetch(
+      const response = await fetch(
         `${API_URL}?${query.toString()}`
       )
 
-      if (!respuesta.ok) {
-        throw new Error(`HTTP ${respuesta.status}`)
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
       }
 
       const tipo =
-        respuesta.headers.get('content-type') ?? ''
+        response.headers.get('content-type') ?? ''
 
       if (!tipo.includes('application/json')) {
         throw new Error(
@@ -100,25 +100,25 @@ export function useBookSearch() {
         )
       }
 
-      const datos: OpenLibraryResponse =
-        await respuesta.json()
+      const data: OpenLibraryResponse =
+        await response.json()
 
-      const resultado =
-        datos.docs.map(convertirLibro)
+      const result =
+        data.docs.map(mapBook)
 
-      setLibros(resultado)
-      setFiltros(params)
+      setBooks(result)
+      setFilters(params)
 
-      const paginas =
-        Math.ceil(datos.numFound / LIMITE)
+      const pages =
+        Math.ceil(data.numFound / PAGE_SIZE)
 
-      setTotalPaginas(
+      setTotalPages(
         Math.min(
-          MAX_PAGINAS,
-          Math.max(1, paginas)
+          MAX_PAGES,
+          Math.max(1, pages)
         )
       )
-      irPagina(page)
+      goToPage(page)
     } catch (e) {
       console.error(e)
       if (e instanceof TypeError) {
@@ -130,37 +130,37 @@ export function useBookSearch() {
           'El servidor respondió con un error. Intentá más tarde.'
         )
       }
-      setLibros([])
+      setBooks([])
     } finally {
-      setCargando(false)
+      setLoading(false)
     }
   }
 
-  function buscar(params: BusquedaParams) {
-    buscarLibros(params, 1)
+  function search(params: SearchParams) {
+    searchBooks(params, 1)
   }
 
-  function anterior() {
-    if (pagina > 1) {
-      buscarLibros(filtros, pagina - 1)
+  function previous() {
+    if (page > 1) {
+      searchBooks(filters, page - 1)
     }
   }
 
-  function siguiente() {
-    if (pagina < totalPaginas) {
-      buscarLibros(filtros, pagina + 1)
+  function next() {
+    if (page < totalPages) {
+      searchBooks(filters, page + 1)
     }
   }
 
   return {
-    libros,
-    pagina,
-    totalPaginas,
-    cargando,
+    books,
+    page,
+    totalPages,
+    loading,
     error,
-    buscar,
-    anterior,
-    siguiente,
-    buscarLibros
+    search,
+    previous,
+    next,
+    searchBooks
   }
 }

@@ -1,19 +1,16 @@
-// Devuelve el breakpoint activo (cortes 768/1024) según el ancho de ventana; el CSS los repite en sus @media.
-
 import { useEffect, useState } from 'react'
 
 export type Breakpoint = 'mobile' | 'tablet' | 'laptop'
 
-const CONSULTAS: Array<{ bp: Breakpoint; query: string }> = [
+const MEDIA_QUERIES: Array<{ bp: Breakpoint; query: string }> = [
   { bp: 'laptop', query: '(min-width: 1024px)' },
   { bp: 'tablet', query: '(min-width: 768px)' },
 ]
 
-function calcularBreakpoint(): Breakpoint {
-  // En SSR / tests no hay window: asumimos mobile.
+function getBreakpoint(): Breakpoint {
   if (typeof window === 'undefined') return 'mobile'
 
-  const match = CONSULTAS.find(
+  const match = MEDIA_QUERIES.find(
     ({ query }) => window.matchMedia(query).matches
   )
 
@@ -22,24 +19,24 @@ function calcularBreakpoint(): Breakpoint {
 
 export function useBreakpoint(): Breakpoint {
   const [breakpoint, setBreakpoint] = useState<Breakpoint>(
-    calcularBreakpoint
+    getBreakpoint
   )
 
   useEffect(() => {
-    const listas = CONSULTAS.map(
+    const mediaQueries = MEDIA_QUERIES.map(
       ({ query }) => window.matchMedia(query)
     )
 
-    const actualizar = () =>
-      setBreakpoint(calcularBreakpoint())
+    const updateBreakpoint = () =>
+      setBreakpoint(getBreakpoint())
 
-    listas.forEach((lista) =>
-      lista.addEventListener('change', actualizar)
+    mediaQueries.forEach((mediaQuery) =>
+      mediaQuery.addEventListener('change', updateBreakpoint)
     )
 
     return () => {
-      listas.forEach((lista) =>
-        lista.removeEventListener('change', actualizar)
+      mediaQueries.forEach((mediaQuery) =>
+        mediaQuery.removeEventListener('change', updateBreakpoint)
       )
     }
   }, [])

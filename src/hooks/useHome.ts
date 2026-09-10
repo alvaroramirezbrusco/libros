@@ -1,91 +1,89 @@
-// Coordina la lógica del Home: búsqueda, categorías y restauración de estado al volver.
-
 import { useEffect, useState } from 'react'
 
-import type { BusquedaParams } from '../components/search/Search'
+import type { SearchParams } from '../components/search/Search'
 
 import { useBookSearch } from './useBookSearch'
 import { useHomeCategories } from './useHomeCategories'
 
-import { CATEGORIAS } from '../constants/categories'
+import { CATEGORIES } from '../constants/categories'
 
 export function useHome() {
 
-  const [buscando, setBuscando] = useState(false)
-  const [restaurando, setRestaurando] = useState(true)
+  const [searching, setSearching] = useState(false)
+  const [restoring, setRestoring] = useState(true)
 
   const {
-    libros,
-    pagina,
-    totalPaginas,
-    cargando,
+    books,
+    page,
+    totalPages,
+    loading,
     error,
-    buscar,
-    anterior,
-    siguiente,
-    buscarLibros
+    search,
+    previous,
+    next,
+    searchBooks
   } = useBookSearch()
 
   const {
-    librosPorCategoria,
-    cargando: cargandoCategorias,
-    cargarCategorias
+    booksByCategory,
+    loading: loadingCategories,
+    loadCategories
   } = useHomeCategories()
 
-  function handleBuscar(params: BusquedaParams) {
-    setBuscando(true)
-    buscar(params)
+  function handleSearch(params: SearchParams) {
+    setSearching(true)
+    search(params)
   }
 
   useEffect(() => {
-    const estadoGuardado =
+    const savedState =
       sessionStorage.getItem('estadoHome')
-    async function cargarInicial() {
+    async function loadInitial() {
 
-      if (estadoGuardado) {
-        const estado =
-          JSON.parse(estadoGuardado)
+      if (savedState) {
+        const state =
+          JSON.parse(savedState)
 
-        setBuscando(true)
+        setSearching(true)
 
-        await buscarLibros(
-          estado.filtros,
-          estado.pagina
+        await searchBooks(
+          state.filtros,
+          state.pagina
         )
 
-        setRestaurando(false)
+        setRestoring(false)
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             window.scrollTo({
-              top: estado.scrollY,
+              top: state.scrollY,
               behavior: 'instant'
             })
           })
         })
         return
       }
-      await cargarCategorias(CATEGORIAS)
-      setRestaurando(false)
+      await loadCategories(CATEGORIES)
+      setRestoring(false)
     }
-    cargarInicial()
+    loadInitial()
   }, [])
 
   return {
-    libros,
-    librosPorCategoria,
+    books,
+    booksByCategory,
 
-    cargando,
-    cargandoCategorias,
+    loading,
+    loadingCategories,
     error,
 
-    buscando,
-    restaurando,
+    searching,
+    restoring,
 
-    pagina,
-    totalPaginas,
+    page,
+    totalPages,
 
-    handleBuscar,
-    irAnterior: anterior,
-    irSiguiente: siguiente
+    handleSearch,
+    goToPreviousPage: previous,
+    goToNextPage: next
   }
 }

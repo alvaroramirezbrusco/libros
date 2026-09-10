@@ -7,18 +7,14 @@ import OSM from 'ol/source/OSM'
 import VectorSource from 'ol/source/Vector'
 import Feature from 'ol/Feature'
 import Point from 'ol/geom/Point'
-//import Overlay from 'ol/Overlay'
 import { Icon, Style } from 'ol/style'
 import { fromLonLat } from 'ol/proj'
-import { defaults as controlesPorDefecto } from 'ol/control/defaults'
+import { defaults as defaultControls } from 'ol/control/defaults'
 import Attribution from 'ol/control/Attribution'
 
 import PageHeader from '../../components/layout/PageHeader'
 import './Contact.css'
 
-// Sin 'ol/ol.css': el mapa es <canvas> y los estilos de los controles van en Contact.css.
-
-// Coordenadas de la Catedral de La Plata
 const LON = -57.9536
 const LAT = -34.9215
 
@@ -33,62 +29,46 @@ const PIN_SVG =
   )
 
 export default function Contact() {
-  const mapaRef = useRef<HTMLDivElement>(null)
-  // const cartelRef = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!mapaRef.current) return
+    if (!mapRef.current) return
 
-    const centro = fromLonLat([LON, LAT])
+    const center = fromLonLat([LON, LAT])
 
-    // Marcador con un pin genérico de mapa
-    const marcador = new Feature(new Point(centro))
-    marcador.setStyle(
+    const marker = new Feature(new Point(center))
+    marker.setStyle(
       new Style({
         image: new Icon({ src: PIN_SVG, width: 32, height: 42, anchor: [0.5, 1] }),
       }),
     )
 
-    // Cartel fijo apoyado sobre el marcador
-    /* const cartel = new Overlay({
-      element: cartelRef.current,
-      positioning: 'bottom-center',
-      offset: [0, -44],
-      stopEvent: false,
-    }) */
-
-    const mapa = new Map({
-      target: mapaRef.current,
-      controls: controlesPorDefecto({ attribution: false }).extend([
+    const map = new Map({
+      target: mapRef.current,
+      controls: defaultControls({ attribution: false }).extend([
         new Attribution({ collapsible: false }),
       ]),
       layers: [
-        // Tiles de OpenStreetMap
         new TileLayer({ source: new OSM() }),
-        new VectorLayer({ source: new VectorSource({ features: [marcador] }) }),
+        new VectorLayer({ source: new VectorSource({ features: [marker] }) }),
       ],
-     // overlays: [cartel],
-      view: new View({ center: centro, zoom: 16 }),
+      view: new View({ center, zoom: 16 }),
     })
 
-    // cartel.setPosition(centro)
-    // cartelRef.current.hidden = false
-
-    return () => mapa.setTarget(undefined)
+    return () => map.setTarget(undefined)
   }, [])
 
   return (
-    <section className="page page-contacto">
-      <PageHeader titulo="Contacto" volver={true} />
+    <section className="page page-contact">
+      <PageHeader title="Contacto" showBack={true} />
 
-      <div className="contacto-content page-content">
+      <div className="contact-content page-content">
 
-        {/* Datos de desarrollador */}
-        <div className="contacto__datos">
+        <div className="contact__details">
           <h2>BookWeb</h2>
           <p> Aplicaciones Móviles</p>
 
-          <ul className="contacto__lista">
+          <ul className="contact__list">
             <li>
               <a href="mailto:alvaroramirezbrusco@gmail.com">
                 <strong>Email:</strong> alvaroramirezbrusco@gmail.com
@@ -117,16 +97,13 @@ export default function Contact() {
           </ul>
         </div>
 
-        {/* Ubicación de la oficina (OpenLayers + tiles de OpenStreetMap) */}
-        <h2 className="contacto__titulo-mapa">Dónde estamos</h2>
+        <div className="contact__map-section">
+          <h2 className="contact__map-title">Dónde estamos</h2>
         <div
-          ref={mapaRef}
-          className="contacto__mapa"
+          ref={mapRef}
+          className="contact__map"
           aria-label="Mapa de la ubicación de la oficina"
-        >
-          {/* <div ref={cartelRef} className="contacto__cartel" hidden>
-            Catedral de La Plata — nuestra oficina
-          </div> */}
+          />
         </div>
 
       </div>

@@ -9,7 +9,7 @@ import EmptyState from '../../components/ui/EmptyState'
 import ConfirmAlert from '../../components/ui/ConfirmAlert'
 import Toast from '../../components/ui/Toast'
 
-import { clearHistory, leerHistorial } from '../../services/history'
+import { clearHistory, readHistory } from '../../services/history'
 
 import { usePagination } from '../../hooks/usePagination'
 
@@ -18,7 +18,7 @@ import './History.css'
 const BOOKS_PER_PAGE = 10
 
 export default function History() {
-  const [historyItems, setHistoryItems] = useState(() => leerHistorial())
+  const [historyItems, setHistoryItems] = useState(() => readHistory())
   const [isConfirmVisible, setIsConfirmVisible] = useState(false)
   const [isToastVisible, setIsToastVisible] = useState(false)
 
@@ -28,9 +28,9 @@ export default function History() {
   )
 
   const {
-    pagina: currentPage,
-    irAnterior: goToPreviousPage,
-    irSiguiente: goToNextPage,
+    page: currentPage,
+    goToPreviousPage,
+    goToNextPage,
   } = usePagination(totalPages)
 
   const paginatedBooks = useMemo(() => {
@@ -39,7 +39,7 @@ export default function History() {
 
     return historyItems
       .slice(start, end)
-      .map((item) => item.libro)
+      .map((item) => item.book)
   }, [historyItems, currentPage])
 
   function requestClearHistory() {
@@ -57,8 +57,8 @@ export default function History() {
     <section className="page page-history">
 
       <PageHeader
-        titulo="BookWeb"
-        volver={false}
+        title="BookWeb"
+        showBack={false}
       />
 
       {isToastVisible && (
@@ -94,9 +94,9 @@ export default function History() {
 
       {isConfirmVisible && (
         <ConfirmAlert
-          mensaje="¿Estás seguro de que querés vaciar el historial?"
-          onCancelar={() => setIsConfirmVisible(false)}
-          onConfirmar={handleClearHistory}
+          message="¿Estás seguro de que querés vaciar el historial?"
+          onCancel={() => setIsConfirmVisible(false)}
+          onConfirm={handleClearHistory}
         />
       )}
 

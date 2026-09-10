@@ -1,5 +1,3 @@
-// Barra superior azul: flecha "volver" (navigate(-1)) + título; desde 768px hospeda la <Navbar />.
-
 import { useNavigate } from 'react-router-dom'
 import ArrowLeftIcon from '../../assets/icons/arrow-left.svg?react'
 import Navbar from './Navbar'
@@ -7,9 +5,9 @@ import './PageHeader.css'
 import { PATHS } from '../../routes/paths'
 
 interface Props {
-  titulo: string          // texto al lado de la flecha
-  volver?: boolean        // ¿mostrar la flecha? por defecto sí
-  estadoHome?: {          // estado del Home para restaurarlo al volver
+  title: string
+  showBack?: boolean
+  homeState?: {
   pagina: number
   filtros: {
     title?: string
@@ -19,14 +17,14 @@ interface Props {
   }
 }
 
-export default function PageHeader({ titulo, volver = true, estadoHome }: Props) {
+export default function PageHeader({ title, showBack = true, homeState }: Props) {
   const navigate = useNavigate()
 
-  function volverPagina() {
-    if (estadoHome) {
+  function goBack() {
+    if (homeState) {
       navigate(PATHS.home, {
         state: {
-          restaurarHome: estadoHome
+          restaurarHome: homeState
         }
       })
     } else {
@@ -36,20 +34,18 @@ export default function PageHeader({ titulo, volver = true, estadoHome }: Props)
 
   return (
     <header className="page-header">
-      {/* El botón solo se renderiza si volver es true */}
-      {volver && (
+      {showBack && (
         <button
           type="button"
           className="page-header__volver"
-          onClick={volverPagina}
-          aria-label="Volver"
+          onClick={goBack}
+          aria-label="Back"
         >
           <ArrowLeftIcon className="page-header__icono" aria-hidden="true" />
         </button>
       )}
-      <h1 className="page-header__titulo">{titulo}</h1>
+      <h1 className="page-header__titulo">{title}</h1>
 
-      {/* Móvil: fija abajo (position:fixed). Desde 768px: fila aquí. */}
       <Navbar />
     </header>
   )

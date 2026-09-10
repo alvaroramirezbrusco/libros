@@ -27,8 +27,6 @@
   border-radius: 0 0 1.25rem 1.25rem;
 }
 
-/* Imagen de fondo */
-
 .book-detail__background {
   position: absolute;
   inset: 0;
@@ -41,8 +39,6 @@
 
   opacity: 0.45;
 }
-
-/* Fondo oscuro */
 
 .book-detail__header::after {
   content: "";
@@ -60,8 +56,6 @@
 }
 
 
-/* Contenido encima del fondo */
-
 .book-detail__content {
   position: relative;
   z-index: 1;
@@ -75,8 +69,6 @@
   padding: 2rem 1.25rem 2.25rem;
 }
 
-
-/* Portada */
 
 .book-detail__cover-container {
   width: clamp(126px, 40vw, 170px);
@@ -106,8 +98,6 @@
 }
 
 
-/* Sin portada */
-
 .book-detail__no-cover {
   width: 100%;
   height: 100%;
@@ -125,8 +115,6 @@
   background-color: var(--color-bg);
 }
 
-
-/* Lista de deseos */
 
 .book-detail__favorite {
   width: 100%;
@@ -174,7 +162,7 @@
   color: var(--color-text-white);
 }
 
-.book-detail__confirmacion {
+.book-detail__confirmation {
   margin: 1rem 0 0;
   padding: 0.75rem 1rem;
 
@@ -186,8 +174,6 @@
   font-weight: var(--font-weight-semibold);
 }
 
-
-/* Titulo */
 
 .book-detail__title {
   flex: 1;
@@ -265,8 +251,6 @@
   }
 }
 
-/* Información */
-
 .book-detail__info,
 .book-detail__data {
   padding: 0 1rem;
@@ -319,8 +303,6 @@
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
-
-/* Toggle de traducción de la descripción */
 
 .book-detail__block-header {
   display: flex;

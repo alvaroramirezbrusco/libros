@@ -3,7 +3,7 @@ import { PRIORITY, LABELS, NOTE_LIMIT } from '../../constants/formWish'
 import './WishForm.css'
 
 interface WishFormProps {
-  onConfirm: (data: { prioridad: number; etiqueta: string; nota?: string }) => void
+  onConfirm: (data: { priority: number; label: string; note?: string }) => void
   onCancel: () => void
 }
 
@@ -27,9 +27,9 @@ export default function WishForm({ onConfirm, onCancel }: WishFormProps) {
     if (newErrors.length > 0 || priority === null) return
 
     onConfirm({
-      prioridad: priority,
-      etiqueta: label.trim(),
-      nota: note.trim() || undefined,
+      priority,
+      label: label.trim(),
+      note: note.trim() || undefined,
     })
   }
 

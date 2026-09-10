@@ -5,7 +5,6 @@
 }
 
 
-/* Layout base de la app (estructura, sin diseño) */
 .app {
   min-height: 100svh;
   display: flex;
@@ -16,11 +15,10 @@
 
 .app-main {
   flex: 1;
-  padding-bottom: 64px;   /* lugar para la navbar fija */
+  padding-bottom: 64px;
 }
 
 @media (min-width: 768px) {
-  /* Sin navbar fija abajo: el menú va dentro del .page-header (sticky) */
   .app-main {
     padding-bottom: 0;
   }

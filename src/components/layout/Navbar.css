@@ -1,11 +1,9 @@
-/* Barra inferior fija (mobile-first); desde 768px se integra como fila dentro de .page-header. */
-
 .navbar {
-  position: fixed;              /* fija respecto de la ventana: siempre visible */
+  position: fixed;
   bottom: 0;
-  left: 50%;                    /* estas 3 líneas la centran y la limitan */
-  transform: translateX(-50%);  /* al ancho de la columna .app (430px),   */
-  width: 100%;                  /* en vez de estirarse a toda la pantalla  */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
   max-width: 430px;
 
   display: flex;
@@ -13,9 +11,9 @@
   align-items: center;
   padding: 8px 0;
   background: var(--color-bg-secondary);     
-  border-top: 1px solid var(--color-surface);    /* #BBBFBF */
+  border-top: 1px solid var(--color-surface);
 
-  z-index: 1000;                 /* por encima de todo, incluso modales */
+  z-index: 1000;
 
   padding-bottom: calc(8px + env(safe-area-inset-bottom));
 }
@@ -26,12 +24,12 @@
   align-items: center;
   gap: 2px;
   text-decoration: none;
-  font-size: var(--font-size-xs);           /* 12px */
-  color: var(--color-text-muted);           /* #9CA3AF — apagado */
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
 }
 
 .navbar__item--activo {
-  color: var(--color-options);              /* #0474C4 — azul acento */
+  color: var(--color-options);
 }
 
 .navbar__icono {
@@ -39,29 +37,28 @@
   height: 22px;
 }
 
-/* Tablet en adelante: la navbar deja de ser fija y pasa a ser una fila dentro de .page-header. */
 @media (min-width: 768px) {
   .navbar {
-    position: static;               /* ya no flota: fluye dentro del header */
+    position: static;
     transform: none;
     width: auto;
     max-width: none;
 
-    margin-left: auto;              /* empuja los links al extremo derecho */
+    margin-left: auto;
 
     gap: 1.5rem;
     padding: 0;
 
-    background: transparent;        /* deja ver el azul del header */
+    background: transparent;
     border: none;
     z-index: auto;
   }
 
   .navbar__item {
-    flex-direction: row;            /* icono + texto en línea */
+    flex-direction: row;
     gap: 6px;
     font-size: var(--font-size-sm);
-    color: rgba(255, 255, 255, 0.75);   /* apagado sobre el azul */
+    color: rgba(255, 255, 255, 0.75);
   }
 
   .navbar__item--activo {
@@ -70,7 +67,6 @@
   }
 }
 
-/* ---- LAPTOP: más aire ---- */
 @media (min-width: 1024px) {
   .navbar {
     gap: 2rem;

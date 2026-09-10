@@ -1,5 +1,4 @@
 :root {
-    /* Base */
     --color-bg: #0B1120;
     --color-bg-secondary: #111827;
     --color-surface: #172033;
@@ -9,22 +8,18 @@
 
     --color-status: #4A6FA5;
 
-    /* Texto */
     --color-text-white: #FFFFFF;
     --color-text-light: #E5E7EB;
     --color-text-muted: #9CA3AF;
     --color-text-dark: #F3F4F6;
 
-    /* Libros */
     --color-card: #171718;
     --color-card-image: #202D42;
     --color-dots: #405B7A;
 
-    /*Transparencias*/
     --color-dark-semitransparent: #00000080;
     --color-surface-semitransparent: #172033CC;
 
-    /* Estados */
     --color-success-light: #4CAF50;
     --color-warning: #FF9800;
     --color-error: #EF4444;
