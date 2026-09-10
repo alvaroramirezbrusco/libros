@@ -79,13 +79,13 @@ export default function History() {
           <EmptyState message="Historial vacío" />
         ) : (
           <>
-            <BookList libros={paginatedBooks} />
+            <BookList books={paginatedBooks} />
 
             <Pagination
-              pagina={currentPage}
-              totalPaginas={totalPages}
-              onAnterior={goToPreviousPage}
-              onSiguiente={goToNextPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPrevious={goToPreviousPage}
+              onNext={goToNextPage}
             />
           </>
         )}

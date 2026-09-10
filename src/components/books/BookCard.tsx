@@ -3,22 +3,22 @@ import type { Book } from '../../types/book'
 import './BookCard.css'
 
 interface Props {
-  libro: Book
+  book: Book
 }
 
-export default function BookCard({ libro }: Props) {
+export default function BookCard({ book }: Props) {
   return (
     <Link
-      to={`/libro/${libro.id}`}
-      state={{ libro }}
+      to={`/libro/${book.id}`}
+      state={{ book }}
       className="book-card"
     >
       <article className="book-card__body">
         <div className="book-card__cover">
-          {libro.cover ? (
+          {book.cover ? (
             <img
-              src={libro.cover}
-              alt={`Portada de ${libro.title}`}
+              src={book.cover}
+              alt={`Portada de ${book.title}`}
             />
           ) : (
             <div className="book-card__no-cover">
@@ -30,18 +30,18 @@ export default function BookCard({ libro }: Props) {
         <div className="book-card__info">
           <div className="book-card__info-box">
             <h3 className="book-card__title">
-              {libro.title}
+              {book.title}
             </h3>
 
             <p className="book-card__author">
-              de {libro.authors.join(', ')}
+              de {book.authors.join(', ')}
             </p>
           </div>
 
-          {libro.rating !== null && (
+          {book.rating !== null && (
             <div className="book-card__rating">
               <span aria-hidden="true">★</span>
-              <span>{libro.rating.toFixed(1)}</span>
+              <span>{book.rating.toFixed(1)}</span>
             </div>
           )}
         </div>

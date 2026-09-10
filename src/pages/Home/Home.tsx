@@ -36,7 +36,7 @@ export default function Home() {
 
       <div className="page-content page-content--wide">
 
-        <Search onBuscar={handleSearch} />
+        <Search onSearch={handleSearch} />
 
         {/* Página principal con categorías */}
         {!searching && (
@@ -51,8 +51,8 @@ export default function Home() {
                 return (
                   <BookSection
                     key={category.subject}
-                    titulo={category.titulo}
-                    libros={categoryBooks}
+                    title={category.titulo}
+                    books={categoryBooks}
                   />
                 )
               })
@@ -84,15 +84,15 @@ export default function Home() {
                   </h2>
                 </div>
 
-                <BookList libros={books} />
+                <BookList books={books} />
 
               </section>
 
               <Pagination
-                pagina={currentPage}
-                totalPaginas={totalPages}
-                onAnterior={goToPreviousPage}
-                onSiguiente={goToNextPage}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPrevious={goToPreviousPage}
+                onNext={goToNextPage}
               />
             </>
           )}
@@ -103,7 +103,6 @@ export default function Home() {
           books.length === 0 && (
             <EmptyState
               message="No se encontraron resultados."
-              icon="search"
             />
           )}
 

@@ -1,179 +1,160 @@
 import { useState } from 'react'
 import './Search.css'
 
-// Lo que Search entrega a Home al enviar: los tres campos son opcionales.
-export interface BusquedaParams {
+export interface SearchParams {
   title?: string
   author?: string
   subject?: string
 }
 
-// Home pasa qué hacer al enviar; Search solo junta lo escrito y lo entrega.
 interface Props {
-  onBuscar: (params: BusquedaParams) => void
+  onSearch: (params: SearchParams) => void
 }
 
-export default function Search({ onBuscar }: Props) {
-  const [abierto, setAbierto] = useState(false)
+export default function Search({ onSearch }: Props) {
+  const [isOpen, setIsOpen] = useState(false)
 
-  // Un estado por campo (controlled inputs): el input siempre refleja estas variables.
-  const [titulo, setTitulo] = useState('')
-  const [autor, setAutor] = useState('')
-  const [categoria, setCategoria] = useState('')
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [category, setCategory] = useState('')
 
-  // Lista de mensajes de error de validación. Vacía = formulario OK.
-  const [errores, setErrores] = useState<string[]>([])
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const t = titulo.trim()
-    const a = autor.trim()
+    const t = title.trim()
+    const a = author.trim()
 
-    // Validaciones del lado del cliente.
-    const nuevosErrores: string[] = []
-
-    if (!t && !a && !categoria) {
-      nuevosErrores.push('Completá al menos un campo para buscar.')
+    if (!t && !a && !category) {
+      setErrorMessage('Complete al menos un campo')
+      return
     }
-    
+
     if (t && t.length < 2) {
-      nuevosErrores.push('El título debe tener al menos 2 caracteres.')
+      setErrorMessage('El título debe tener al menos 2 caracteres.')
+      return
     }
     if (a && a.length < 2) {
-      nuevosErrores.push('El autor debe tener al menos 2 caracteres.')
+      setErrorMessage('El autor debe tener al menos 2 caracteres.')
+      return
     }
-    
+
     if (a && /\d/.test(a)) {
-      nuevosErrores.push('El autor no puede contener números.')
+      setErrorMessage('El autor no puede contener números.')
+      return
     }
 
-    setErrores(nuevosErrores)
+    setErrorMessage('')
 
-    // Si hay errores, cortamos acá: no se hace la búsqueda.
-    if (nuevosErrores.length > 0) return
-
-    // Mandamos solo los campos con algo escrito (undefined evita strings vacíos en la API).
-    onBuscar({
+    onSearch({
       title: t || undefined,
       author: a || undefined,
-      subject: categoria || undefined,
+      subject: category || undefined,
     })
-    setAbierto(false)   // cerrar el menú tras una búsqueda válida
+    setIsOpen(false)
   }
 
   return (
-    <section className={`search ${abierto ? 'search--open' : 'search--closed'}`}>
+    <section className={`search ${isOpen ? 'search--open' : 'search--closed'}`}>
 
       <button
         type="button"
         className="search-header"
-        onClick={() => setAbierto(!abierto)}
-        aria-expanded={abierto}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
       >
         <span>
-          {abierto ? 'Ocultar menú' : 'Mostrar menú'}
+          {isOpen ? 'Ocultar menú' : 'Mostrar menú'}
         </span>
 
         <span className="search-arrow">
-          {abierto ? '▲' : '▼'}
+          {isOpen ? '▲' : '▼'}
         </span>
       </button>
 
-        <form
-          className={`search-form ${
-            abierto
-              ? 'search-form--open'
-              : 'search-form--closed'
-          }`}
-          onSubmit={handleSubmit}
-        >
+      <form
+        className={`search-form ${
+          isOpen
+            ? 'search-form--open'
+            : 'search-form--closed'
+        }`}
+        onSubmit={handleSubmit}
+      >
 
-          {/* Mensajes de validación (si los hay) */}
-          {errores.length > 0 && (
-            <ul className="search-errores">
-              {errores.map((msg) => (
-                <li key={msg}>{msg}</li>
-              ))}
-            </ul>
-          )}
+        <div className="search-field">
+          <label htmlFor="title">
+            Título
+          </label>
 
-          <div className="search-field">
-            <label htmlFor="titulo">
-              Título
-            </label>
+          <input
+            id="title"
+            type="text"
+            placeholder="Cyberspace"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
 
-            <input
-              id="titulo"
-              type="text"
-              placeholder="Cyberspace"
-              value={titulo}
-              onChange={(e) => setTitulo(e.target.value)}
-            />
-          </div>
+        <div className="search-field">
+          <label htmlFor="author">
+            Autor
+          </label>
 
+          <input
+            id="author"
+            type="text"
+            placeholder="Miachel Benedikt"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+          />
+        </div>
 
-          <div className="search-field">
-            <label htmlFor="autor">
-              Autor
-            </label>
+        <div className="search-field">
+          <label htmlFor="category">
+            Categoría
+          </label>
 
-            <input
-              id="autor"
-              type="text"
-              placeholder="Miachel Benedikt"
-              value={autor}
-              onChange={(e) => setAutor(e.target.value)}
-            />
-          </div>
-
-
-          <div className="search-field">
-            <label htmlFor="categoria">
-              Categoría
-            </label>
-
-            <select
-              id="categoria"
-              value={categoria}
-              onChange={(e) => setCategoria(e.target.value)}
-            >
-              <option value="">
-                Todos
-              </option>
-
-              <option value="fantasy">
-                Fantasía
-              </option>
-
-              <option value="fiction">
-                Ficción
-              </option>
-
-              <option value="romance">
-                Romance
-              </option>
-
-              <option value="mystery">
-                Misterio
-              </option>
-
-              <option value="science_fiction">
-                Ciencia ficción
-              </option>
-            </select>
-          </div>
-
-
-          <button
-            type="submit"
-            className="search-button"
+          <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
           >
-            Buscar
-          </button>
+            <option value="">
+              Seleccionar
+            </option>
 
-        </form>
+            <option value="fantasy">
+              Fantasía
+            </option>
 
+            <option value="fiction">
+              Ficción
+            </option>
+
+            <option value="romance">
+              Romance
+            </option>
+
+            <option value="mystery">
+              Misterio
+            </option>
+
+            <option value="science_fiction">
+              Ciencia ficción
+            </option>
+          </select>
+        </div>
+
+        {errorMessage && <p className="search-error-inline">{errorMessage}</p>}
+
+        <button
+          type="submit"
+          className="search-button"
+        >
+          Buscar
+        </button>
+      </form>
     </section>
   )
 }

@@ -1,4 +1,3 @@
-/* El <a> envoltorio: sin estilo propio, solo resetea el link */
 .book-card {
   display: block;
   width: 100%;
@@ -7,13 +6,8 @@
   text-decoration: none;
   color: var(--color-text-dark);
   text-align: left;
-
-
 }
 
-
-
-/* El <article>: acá va el aspecto visual de la tarjeta */
 .book-card__body {
   display: flex;
   flex-direction: column;
@@ -33,8 +27,6 @@
   border-color: var(--color-options);
 }
 
-/* Portada */
-
 .book-card__cover {
   width: 100%;
   aspect-ratio: 2 / 3;
@@ -50,9 +42,6 @@
   object-fit: cover;
 }
 
-
-/* Sin portada */
-
 .book-card__no-cover {
   width: 100%;
   height: 100%;
@@ -66,9 +55,6 @@
   color: var(--color-text-muted);
   text-align: center;
 }
-
-
-/* Información */
 
 .book-card__info {
   display: flex;
@@ -116,9 +102,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-
-/* Calificación */
 
 .book-card__rating {
   display: flex;

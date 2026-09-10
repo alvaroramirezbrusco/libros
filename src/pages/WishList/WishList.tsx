@@ -163,10 +163,10 @@ export default function WishList() {
               </div>
 
               <Pagination
-                pagina={pagina}
-                totalPaginas={totalPaginas}
-                onAnterior={irAnterior}
-                onSiguiente={irSiguiente}
+                currentPage={pagina}
+                totalPages={totalPaginas}
+                onPrevious={irAnterior}
+                onNext={irSiguiente}
               />
             </>
           )}

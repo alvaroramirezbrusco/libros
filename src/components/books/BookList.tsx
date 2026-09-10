@@ -3,16 +3,16 @@ import BookCard from './BookCard'
 import './BookList.css'
 
 interface Props {
-  libros: Book[]
+  books: Book[]
 }
 
-export default function BookList({ libros }: Props) {
+export default function BookList({ books }: Props) {
   return (
     <div className="book-list">
-      {libros.map((libro) => (
+      {books.map((book) => (
         <BookCard
-          key={libro.id}
-          libro={libro}
+          key={book.id}
+          book={book}
         />
       ))}
     </div>

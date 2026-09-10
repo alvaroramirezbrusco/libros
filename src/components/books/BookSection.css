@@ -3,9 +3,6 @@
   margin-top: 2rem;
 }
 
-
-/* Encabezado */
-
 .book-section__header {
   display: flex;
   align-items: center;
@@ -24,9 +21,6 @@
 
   color: var(--color-text-dark);
 }
-
-
-/* Controles */
 
 .book-section__controls {
   display: flex;
@@ -81,7 +75,6 @@
   width: 100%;
 }
 
-/* Tablet/laptop: los 4 libros del paso en una sola fila (anula la grilla fluida de BookList.css). */
 @media (min-width: 768px) {
   .book-section__carousel-content .book-list {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -89,15 +82,15 @@
   }
 }
 
-.book-section__carousel-content--izquierda {
-  animation: carrusel-izquierda 0.3s ease;
+.book-section__carousel-content--left {
+  animation: carousel-left 0.3s ease;
 }
 
-.book-section__carousel-content--derecha {
-  animation: carrusel-derecha 0.3s ease;
+.book-section__carousel-content--right {
+  animation: carousel-right 0.3s ease;
 }
 
-@keyframes carrusel-izquierda {
+@keyframes carousel-left {
   from {
     opacity: 0;
     transform: translateX(30px);
@@ -109,19 +102,7 @@
   }
 }
 
-@keyframes carrusel-derecha {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes carrusel-derecha {
+@keyframes carousel-right {
   from {
     opacity: 0;
     transform: translateX(-30px);

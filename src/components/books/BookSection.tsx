@@ -5,51 +5,50 @@ import { useBreakpoint } from '../../hooks/useBreakpoint'
 import './BookSection.css'
 
 interface Props {
-  titulo: string
-  libros: Book[]
+  title: string
+  books: Book[]
 }
 
 export default function BookSection({
-  titulo,
-  libros
+  title,
+  books
 }: Props) {
 
-  // Libros por vista y por paso del carrusel: 2 en móvil, 4 desde tablet.
-  const librosPorVista = useBreakpoint() === 'mobile' ? 2 : 4
+  const booksPerView = useBreakpoint() === 'mobile' ? 2 : 4
 
-  const [indice, setIndice] = useState(0)
-  const [botonActivo, setBotonActivo] = useState<'anterior' | 'siguiente' | null>(null)
-  const [direccion, setDireccion] = useState<'izquierda' | 'derecha' | null>(null)
+  const [index, setIndex] = useState(0)
+  const [activeButton, setActiveButton] = useState<'previous' | 'next' | null>(null)
+  const [direction, setDirection] = useState<'left' | 'right' | null>(null)
 
-  const librosVisibles = libros.slice(
-    indice,
-    indice + librosPorVista
+  const visibleBooks = books.slice(
+    index,
+    index + booksPerView
   )
 
-  const puedeRetroceder = indice > 0
+  const canGoBack = index > 0
 
-  const puedeAvanzar = indice + librosPorVista < libros.length
+  const canGoNext = index + booksPerView < books.length
 
-  const anterior = () => {
-    if (puedeRetroceder) {
-      setDireccion('derecha')
-      setIndice(indice - librosPorVista)
-      setBotonActivo('anterior')
+  const previous = () => {
+    if (canGoBack) {
+      setDirection('right')
+      setIndex(index - booksPerView)
+      setActiveButton('previous')
 
       setTimeout(() => {
-        setBotonActivo(null)
+        setActiveButton(null)
       }, 300)
     }
   }
 
-  const siguiente = () => {
-    if (puedeAvanzar) {
-      setDireccion('izquierda')
-      setIndice(indice + librosPorVista)
-      setBotonActivo('siguiente')
+  const next = () => {
+    if (canGoNext) {
+      setDirection('left')
+      setIndex(index + booksPerView)
+      setActiveButton('next')
 
       setTimeout(() => {
-        setBotonActivo(null)
+        setActiveButton(null)
       }, 300)
     }
   }
@@ -60,7 +59,7 @@ export default function BookSection({
       <div className="book-section__header">
 
         <h2 className="book-section__title">
-          {titulo}
+          {title}
         </h2>
 
         <div className="book-section__controls">
@@ -68,11 +67,11 @@ export default function BookSection({
           <button
             type="button"
             className={`book-section__button ${
-              botonActivo === 'anterior' ? 'book-section__button--active' : ''
+              activeButton === 'previous' ? 'book-section__button--active' : ''
             }`}
-            onClick={anterior}
-            disabled={!puedeRetroceder}
-            aria-label={`Libros anteriores de ${titulo}`}
+            onClick={previous}
+            disabled={!canGoBack}
+            aria-label={`Libros anteriores de ${title}`}
           >
             ‹
           </button>
@@ -80,11 +79,11 @@ export default function BookSection({
           <button
             type="button"
             className={`book-section__button ${
-              botonActivo === 'siguiente' ? 'book-section__button--active' : ''
+              activeButton === 'next' ? 'book-section__button--active' : ''
             }`}
-            onClick={siguiente}
-            disabled={!puedeAvanzar}
-            aria-label={`Más libros de ${titulo}`}
+            onClick={next}
+            disabled={!canGoNext}
+            aria-label={`Más libros de ${title}`}
           >
             ›
           </button>
@@ -95,10 +94,10 @@ export default function BookSection({
 
       <div className="book-section__carousel">
         <div
-          key={indice}
-          className={`book-section__carousel-content book-section__carousel-content--${direccion ?? ''}`}
+          key={index}
+          className={`book-section__carousel-content book-section__carousel-content--${direction ?? ''}`}
         >
-          <BookList libros={librosVisibles} />
+          <BookList books={visibleBooks} />
         </div>
       </div>
 

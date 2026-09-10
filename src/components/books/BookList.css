@@ -6,7 +6,6 @@
   width: 100%;
 }
 
-/* Tablet/laptop: la grilla suma columnas según el ancho (Home e Historial); el carrusel sigue en 2. */
 @media (min-width: 768px) {
   .book-list {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
