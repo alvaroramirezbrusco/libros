@@ -1,0 +1,19 @@
+{
+  "name": "BookWeb",
+  "short_name": "BookWeb",
+  "description": "Descubrí, guardá y organizá tus próximas lecturas.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0B1120",
+  "theme_color": "#1677C8",
+  "icons": [
+    {
+      "src": "./logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
