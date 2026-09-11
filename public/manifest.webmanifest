@@ -1,0 +1,18 @@
+{
+  "id": "/libros/",
+  "name": "BookWeb",
+  "short_name": "BookWeb",
+  "description": "Buscá libros, guardá tu lista de deseos y mirá tu historial de lectura.",
+  "start_url": "/libros/",
+  "scope": "/libros/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "es",
+  "theme_color": "#0474C4",
+  "background_color": "#ffffff",
+  "icons": [
+    { "src": "/libros/pwa-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/libros/pwa-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/libros/pwa-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

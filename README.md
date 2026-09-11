@@ -58,6 +58,10 @@ Vite imprime la URL local (por defecto <http://localhost:5173>).
 | `npm run preview` | Sirve localmente el contenido de `dist/` para probar el build. |
 | `npm run lint` | Corre ESLint sobre todo el proyecto. |
 
+> El Service Worker (PWA) **solo se registra en el build de producción**
+> (`import.meta.env.PROD`, ver `src/main.tsx`). Para probarlo hace falta
+> `npm run build && npm run preview`, no alcanza con `npm run dev`.
+
 ---
 
 ## Enfoque del trabajo integrador
@@ -67,15 +71,21 @@ Vite imprime la URL local (por defecto <http://localhost:5173>).
 - **React 19 + TypeScript**, empaquetado con **Vite 8**. Se eligió React por el
   modelo de componentes y el ecosistema de hooks, que encaja bien con una SPA de
   varias vistas que comparten estado y lógica de datos. TypeScript aporta tipos
-  para las respuestas de la API (`Book`, `BookDetail`, `ItemDeseo`,
-  `ItemHistorial`) y reduce errores al mapear el JSON de Open Library.
+  para las respuestas de la API (`Book`, `BookDetail`, `WishItem`,
+  `HistoryItem`) y reduce errores al mapear el JSON de Open Library.
 - **react-router-dom v7** para el ruteo del lado del cliente.
 - **OpenLayers (`ol`)** para el mapa de la página de contacto (tiles de
   OpenStreetMap).
+- **react-icons** para los íconos de estados vacíos; el resto de los íconos son
+  SVG propios importados como componentes con **vite-plugin-svgr**.
+- **PWA manual** (sin plugin): `manifest.webmanifest` + `sw.js` escritos a mano,
+  para instalar la app y navegar offline. Ver la sección [PWA](#pwa-manifest--service-worker).
 - Sin librería de estado global ni de UI: el estado se resuelve con hooks
   propios y `useState`/`useEffect`; los estilos son **CSS plano** por componente
   más un set de variables globales (`src/styles/colors.css`,
   `typography.css`, `global.css`).
+- El **código** (variables, funciones, tipos) está en **inglés**; los
+  **textos que ve el usuario** están en **español**.
 
 ### APIs y datos
 
@@ -105,10 +115,16 @@ componentes nunca lo toquen directamente.
 | Página de contacto con mapa | `pages/Contact/Contact.tsx` (OpenLayers) |
 | Diseño responsive | `hooks/useBreakpoint.ts` + CSS por componente |
 | Estados vacíos / carga / errores | `components/ui/` (`EmptyState`, `Loader`, `Toast`, `ConfirmAlert`) |
+| App instalable y con soporte offline (PWA) | `public/manifest.webmanifest` + `public/sw.js` + registro en `src/main.tsx` |
 
 ### Estructura de recursos
 
 ```
+public/                Manifest, Service Worker e íconos de la PWA (se copian tal cual al build)
+├── manifest.webmanifest
+├── sw.js
+└── pwa-192.png, pwa-512.png, pwa-maskable-512.png
+
 src/
 ├── assets/           Imágenes e iconos SVG (los .svg se importan como componentes vía vite-plugin-svgr)
 ├── components/        Componentes de presentación, agrupados por dominio
@@ -118,7 +134,7 @@ src/
 │   ├── search/        Formulario de búsqueda y filtros
 │   ├── ui/            Piezas reutilizables (Loader, Toast, EmptyState, ConfirmAlert)
 │   └── wishes/        Tarjeta, formulario y filtros de la lista de deseos
-├── constants/         Categorías del Home, configuración del formulario de deseos
+├── constants/         Categorías del Home, ítems de la Navbar, configuración del formulario de deseos
 ├── data/              books.mock.ts (datos de ejemplo para desarrollo)
 ├── hooks/             Lógica reutilizable (fetch + estado): useBook, useBookSearch,
 │                      useHome, useHomeCategories, usePagination, useBreakpoint, useTranslation
@@ -146,9 +162,68 @@ La API de Open Library es pública y **sin key**, pero conviene tener en cuenta:
 
 ---
 
+## PWA (manifest + Service Worker)
+
+BookWeb es instalable y funciona parcialmente **sin conexión**. Se implementó
+a mano (sin `vite-plugin-pwa`), con dos archivos en `public/` que Vite copia
+tal cual al build:
+
+- **`manifest.webmanifest`** — nombre, colores, `display: standalone` e íconos
+  (`pwa-192.png`, `pwa-512.png`, `pwa-maskable-512.png`). Enlazado desde
+  `index.html`.
+- **`sw.js`** — Service Worker con 3 estrategias de caché, según lo que se pide:
+  - **Cache-first** para las portadas de Open Library (no cambian una vez bajadas).
+  - **Network-first** para las APIs (Open Library / MyMemory): online trae datos
+    frescos, offline devuelve la última respuesta guardada.
+  - **Stale-while-revalidate** para el resto de los archivos propios (JS, CSS,
+    fuentes).
+
+  En el `install` precachea el *shell* de la app (`index.html`, manifest,
+  íconos) y además **lee `index.html` para encontrar los bundles con hash**
+  (`/assets/index-XXXX.js` y `.css`) y los precachea también — si no,
+  quedarían afuera del caché y la app no abriría offline en la primera visita.
+
+Registrado en `src/main.tsx`, **solo en producción**:
+
+```ts
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+  })
+}
+```
+
+### Qué funciona offline y qué no
+
+| Offline | |
+|---|---|
+| ✅ Abrir la app, navegar entre Inicio / Historial / Lista de deseos | El *shell* está precacheado |
+| ✅ Ver deseos e historial ya guardados | Viven en `localStorage`, no dependen de red |
+| ✅ Portadas y fichas de libros ya visitados | Quedan en caché tras la primera visita online |
+| ❌ Buscar libros nuevos o abrir una ficha nunca vista | Necesitan la API de Open Library en vivo |
+
+### Cómo probarla
+
+El Service Worker **no corre en `npm run dev`** (a propósito, para no cachear
+mientras se desarrolla). Hay que probar el build:
+
+```bash
+npm run build
+npm run preview
+```
+
+Con la URL de `preview` abierta en Chrome/Edge: F12 → **Application**
+→ *Manifest* (sin errores) y *Service Workers* (`sw.js` activo) → pestaña
+**Network** → tildar **Offline** → recargar.
+
+> Si cambiás `sw.js`, subí el número de `VERSION` al principio del archivo;
+> si no, el navegador puede seguir usando el Service Worker viejo cacheado.
+
+---
+
 ## Despliegue en GitHub Pages
 
-Todavía no está configurado. Para publicarlo hacen falta 3 ajustes:
+Todavía no está configurado. Para publicarlo hacen falta 4 ajustes:
 
 1. **Base del build** — en `vite.config.ts`:
 
@@ -181,3 +256,8 @@ Todavía no está configurado. Para publicarlo hacen falta 3 ajustes:
 
    Luego, en *Settings → Pages* del repo, elegir el branch `gh-pages`. La URL
    queda en `https://alvaroramirezbrusco.github.io/libros/`.
+
+4. **Ajustar la PWA a la subcarpeta** — con `base: '/libros/'` el sitio ya no
+   vive en la raíz, así que en `manifest.webmanifest` hay que cambiar
+   `start_url` y `scope` a `/libros/` (y los `src` de los íconos), y registrar
+   el Service Worker en esa ruta: `navigator.serviceWorker.register('/libros/sw.js')`.
