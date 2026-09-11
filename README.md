@@ -10,10 +10,8 @@ desde la API pública de [Open Library](https://openlibrary.org/developers/api).
 
 ## URL de producción (GitHub Pages)
 
-> ⚠️ **Pendiente de publicar.** Al momento de la entrega el proyecto **todavía no
-> está hosteado** en GitHub Pages (no hay branch `gh-pages` ni workflow de
-> despliegue en el repo). Ver la sección [Despliegue en GitHub Pages](#despliegue-en-github-pages)
-> para los pasos. Una vez publicado, la URL será aproximadamente:
+> ✅ **Actualmente publicado.** El proyecto **ya
+> está hosteado** en GitHub Pages. La URL es:
 >
 > `https://alvaroramirezbrusco.github.io/libros/`
 
@@ -220,44 +218,3 @@ Con la URL de `preview` abierta en Chrome/Edge: F12 → **Application**
 > si no, el navegador puede seguir usando el Service Worker viejo cacheado.
 
 ---
-
-## Despliegue en GitHub Pages
-
-Todavía no está configurado. Para publicarlo hacen falta 4 ajustes:
-
-1. **Base del build** — en `vite.config.ts`:
-
-   ```ts
-   export default defineConfig({
-     base: '/libros/',            // nombre del repo
-     plugins: [react(), svgr()],
-   })
-   ```
-
-2. **Ruteo** — GitHub Pages no hace fallback de SPA, así que las rutas directas
-   (`/libros/historial`) dan 404 con `BrowserRouter`. La opción más simple es
-   cambiar a `HashRouter` en `src/main.tsx`:
-
-   ```tsx
-   import { HashRouter } from 'react-router-dom'
-   // ...
-   <HashRouter>
-     <App />
-   </HashRouter>
-   ```
-
-3. **Publicar** — con el paquete `gh-pages`:
-
-   ```bash
-   npm i -D gh-pages
-   # en package.json -> "scripts": { "deploy": "npm run build && gh-pages -d dist" }
-   npm run deploy
-   ```
-
-   Luego, en *Settings → Pages* del repo, elegir el branch `gh-pages`. La URL
-   queda en `https://alvaroramirezbrusco.github.io/libros/`.
-
-4. **Ajustar la PWA a la subcarpeta** — con `base: '/libros/'` el sitio ya no
-   vive en la raíz, así que en `manifest.webmanifest` hay que cambiar
-   `start_url` y `scope` a `/libros/` (y los `src` de los íconos), y registrar
-   el Service Worker en esa ruta: `navigator.serviceWorker.register('/libros/sw.js')`.
